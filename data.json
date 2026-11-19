@@ -25,8 +25,46 @@
         "price": "16000"
       },
       "paidDate": "2026-11-02",
-      "lessons": [],
-      "receipts": []
+      "lessons": [
+        {
+          "date": "2026-11-02",
+          "status": "planned"
+        },
+        {
+          "date": "2026-11-05",
+          "status": "planned"
+        },
+        {
+          "date": "2026-11-09",
+          "status": "planned"
+        },
+        {
+          "date": "2026-11-12",
+          "status": "planned"
+        },
+        {
+          "date": "2026-11-16",
+          "status": "planned"
+        },
+        {
+          "date": "2026-11-19",
+          "status": "planned"
+        },
+        {
+          "date": "2026-11-23",
+          "status": "planned"
+        },
+        {
+          "date": "2026-11-26",
+          "status": "planned"
+        }
+      ],
+      "receipts": [],
+      "days": [
+        1,
+        4
+      ],
+      "perWeek": 2
     }
   }
 }
