@@ -14,6 +14,7 @@
 }
 [data-theme=green]{--bg:#e9f6ee;--p:#2a9a58;--ps:#d3eedd;--tx:#14301f;--mu:#5d7a69;--ln:#c8e3d2}
 [data-theme=pink]{--bg:#fdeef4;--p:#d93f7a;--ps:#fad9e7;--tx:#3a1c29;--mu:#86596b;--ln:#f0d0de}
+[data-theme=lavender]{--bg:#f3eefc;--p:#7c5cd6;--ps:#e4dbf7;--tx:#241a3a;--mu:#6f6187;--ln:#d7cced;--burn:#c2410c;--burns:#ffe6d6}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;transition:background .3s}
@@ -25,7 +26,7 @@ h2{font-size:1.05rem;margin:0 0 12px}
 .themes{display:flex;gap:8px}
 .themes button{width:32px;height:32px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1.5px var(--ln);cursor:pointer;padding:0}
 .themes button[aria-pressed=true]{box-shadow:0 0 0 2.5px var(--tx)}
-.themes [data-t=blue]{background:#2f7fe6}.themes [data-t=green]{background:#2a9a58}.themes [data-t=pink]{background:#d93f7a}
+.themes [data-t=blue]{background:#2f7fe6}.themes [data-t=green]{background:#2a9a58}.themes [data-t=pink]{background:#d93f7a}.themes [data-t=lavender]{background:#7c5cd6}
 .card{background:var(--card);border:1px solid var(--ln);border-radius:var(--r);padding:18px;margin-bottom:14px}
 .plan{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-end}
 .plan .big{font-size:2rem;font-weight:700;line-height:1;color:var(--p)}
@@ -56,13 +57,13 @@ details summary::after{content:"+";font-size:1.4rem;color:var(--p);line-height:1
 details[open] summary::after{content:"–"}
 details ul{margin:12px 0 0;padding-left:20px;color:var(--tx)}
 details li{margin-bottom:6px}
-.receipts{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
-.receipts figure{margin:0;cursor:pointer}
-.receipts img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;border:1px solid var(--ln);display:block;background:var(--ps)}
-.receipts figcaption{font-size:.8rem;color:var(--mu);margin-top:4px}
-#lb{position:fixed;inset:0;background:rgba(10,15,25,.85);display:none;place-items:center;padding:16px;z-index:9}
-#lb.on{display:grid}
-#lb img{max-width:100%;max-height:90vh;border-radius:10px}
+/* история абонементов */
+.hist{display:flex;flex-direction:column;gap:8px}
+.hist .ab{border:1px solid var(--ln);border-radius:14px;padding:12px 14px;background:var(--ps)}
+.hist .ab .hd{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-weight:700}
+.hist .ab .dt{color:var(--mu);font-size:.82rem;font-weight:400}
+.hist .ab .nums{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.hist .ab .nums span{background:#fff;border-radius:10px;padding:4px 10px;font-size:.85rem}
 .login{max-width:380px;margin:12vh auto 0;text-align:center}
 .login input{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--ln);font:inherit;margin:10px 0;text-align:center}
 .login button{width:100%;padding:12px;border:0;border-radius:12px;background:var(--p);color:#fff;font:inherit;font-weight:700;cursor:pointer}
@@ -102,7 +103,6 @@ button:focus-visible,summary:focus-visible,input:focus-visible,figure:focus-visi
 <body>
 <main id="app"></main>
 <div id="toast" role="status"></div>
-<div id="lb" role="dialog" aria-label="Чек"><img alt="Чек об оплате"></div>
 
 <script>
 const $ = s => document.querySelector(s);
@@ -132,7 +132,8 @@ function themeSwitch(){
   return `<div class="themes" role="group" aria-label="Цвет оформления">
     <button data-t="blue" aria-label="Голубая тема"></button>
     <button data-t="green" aria-label="Зелёная тема"></button>
-    <button data-t="pink" aria-label="Розовая тема"></button></div>`;
+    <button data-t="pink" aria-label="Розовая тема"></button>
+    <button data-t="lavender" aria-label="Лавандовая тема"></button></div>`;
 }
 function bindThemes(){
   document.querySelectorAll('.themes button').forEach(b=>b.onclick=()=>setTheme(b.dataset.t));
@@ -154,11 +155,11 @@ function login(msg){
 }
 
 /* кабинет */
-function render(st, rules){
+function render(st, rules, holidays){
   const total = st.plan.lessons;
   const L = (st.lessons||[]).slice().sort((a,b)=>a.date.localeCompare(b.date));
   const cnt = k => L.filter(l=>l.status===k).length;
-  const done = cnt('attended'), burned = cnt('burned');
+  const done = cnt('attended'), burned = cnt('burned'), moved = cnt('moved'), cancelled = cnt('cancelled');
   const left = Math.max(total-done-burned,0);
 
   const from = parse(st.paidDate);
@@ -181,10 +182,25 @@ function render(st, rules){
     return `<li><span>${esc(fmtShort(parse(l.date)))}${l.note?` <span class="sub">· ${esc(l.note)}</span>`:''}</span><span class="tag ${s.c}">${s.t}${l.movedTo?' на '+esc(fmtShort(parse(l.movedTo))):''}</span></li>`;
   }).join('')}</ul>` : '<p class="empty">Занятий пока нет.</p>';
 
-  const rec = (st.receipts||[]).length ? `<div class="receipts">${st.receipts.map((r,i)=>{
-    const o=typeof r==='string'?{file:r}:r;
-    return `<figure tabindex="0" data-src="${esc(o.file)}"><img loading="lazy" src="${esc(o.file)}" alt="Чек ${i+1}"><figcaption>${esc(o.label||('Чек '+(i+1)))}</figcaption></figure>`;
-  }).join('')}</div>` : '<p class="empty">Чеки пока не добавлены.</p>';
+  /* история абонементов */
+  const hist = (st.history||[]);
+  const histHTML = hist.length ? `<div class="hist">${hist.slice().reverse().map(h=>`
+    <div class="ab">
+      <div class="hd"><span>${h.lessons} ${plural(h.lessons,'занятие','занятия','занятий')}</span>
+        <span class="dt">${h.from?fmt(parse(h.from)):''}${h.to?' — '+fmt(parse(h.to)):''}</span></div>
+      <div class="nums">
+        <span>посещено: ${h.attended||0}</span>
+        <span>перенесено: ${h.moved||0}</span>
+        <span>сгорело: ${h.burned||0}</span>
+        ${h.cancelled?`<span>отменено: ${h.cancelled}</span>`:''}
+        ${h.price?`<span>${esc(h.price)}</span>`:''}
+      </div>
+    </div>`).join('')}</div>` : '<p class="empty">Пока это первый абонемент.</p>';
+
+  /* нерабочие дни: ближайшие 5 в пределах абонемента */
+  const hs = (holidays||[]).map(d=>({d,dt:parse(d)})).filter(x=>x.dt>=today&&x.dt<=to).sort((a,b)=>a.d-b.d).slice(0,5);
+  const holHTML = hs.length ? `<ul class="list">${hs.map(x=>`<li><span>${esc(fmtShort(x.dt))}</span><span class="tag off">нерабочий</span></li>`).join('')}</ul>`
+    : '<p class="empty">На этот абонемент нерабочих дней нет.</p>';
 
   app.innerHTML=`
   <header>
@@ -215,19 +231,14 @@ function render(st, rules){
 
   <section class="card"><h2>История</h2>${lessons}</section>
 
-  <section class="card"><details><summary>Правила отмен и переносов</summary>
-    <ul>${(rules||[]).map(r=>`<li>${esc(r)}</li>`).join('')}</ul></details></section>
+  <section class="card"><h2>История абонементов</h2>${histHTML}</section>
 
-  <section class="card"><h2>Чеки об оплате</h2>${rec}</section>`;
+  <section class="card"><h2>Нерабочие дни</h2>${holHTML}</section>
+
+  <section class="card"><details><summary>Правила отмен и переносов</summary>
+    <ul>${(rules||[]).map(r=>`<li>${esc(r)}</li>`).join('')}</ul></details></section>`;
 
   bindThemes();
-  const lb=$('#lb');
-  document.querySelectorAll('.receipts figure').forEach(f=>{
-    const open=()=>{lb.querySelector('img').src=f.dataset.src;lb.classList.add('on')};
-    f.onclick=open;f.onkeydown=e=>{if(e.key==='Enter')open()};
-  });
-  lb.onclick=()=>lb.classList.remove('on');
-  document.onkeydown=e=>{if(e.key==='Escape')lb.classList.remove('on')};
 }
 
 /* ===== режим преподавателя: правки сохраняются в data.json через GitHub API ===== */
@@ -245,20 +256,12 @@ async function gh(path,method='GET',body){
   if(!r.ok) throw new Error(r.status===401?'Токен не подходит или истёк':(r.status===403||r.status===404)?'Нет доступа к репозиторию '+R+'. Проверьте права токена':(r.status===409||r.status===422)?'Данные изменились на GitHub. Обновите страницу':(j.message||r.status));
   return j;
 }
-async function load(){const j=await gh('data.json');SHA=j.sha;D=JSON.parse(dec(j.content));D.students=D.students||{}}
+async function load(){const j=await gh('data.json');SHA=j.sha;D=JSON.parse(dec(j.content));D.students=D.students||{};D.holidays=D.holidays||[];D.rules=D.rules||[]}
 async function save(msg){const j=await gh('data.json','PUT',{message:msg,content:enc(JSON.stringify(D,null,2)),sha:SHA});SHA=j.content.sha}
 async function act(fn,msg){
   try{await fn();await save(msg);view();toast('Сохранено. На сайте изменения появятся через 1–2 минуты')}
   catch(e){toast(e.message,1);try{await load()}catch(x){}view()}
 }
-async function pack(file){
-  const bm=await createImageBitmap(file),k=Math.min(1,1600/Math.max(bm.width,bm.height));
-  const c=document.createElement('canvas');c.width=Math.round(bm.width*k);c.height=Math.round(bm.height*k);
-  c.getContext('2d').drawImage(bm,0,0,c.width,c.height);
-  const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',.82));
-  return await new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result.split(',')[1]);f.readAsDataURL(blob)});
-}
-async function delFile(p){const j=await gh(p);await gh(p,'DELETE',{message:'Удаление чека',sha:j.sha})}
 const newCode=()=>{let c;do c=String(1000+Math.floor(Math.random()*9000));while(D.students[c]||c===D.admin);return c};
 
 /* расписание: дни недели ученика, автоматическая расстановка и перенос */
@@ -266,9 +269,11 @@ const DN=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
 const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
 const byDate=(a,b)=>a.date.localeCompare(b.date);
 function endDate(st){if(st.validTo)return parse(st.validTo);const d=parse(st.paidDate);d.setDate(d.getDate()+(st.validDays||40));return d}
-function layout(s,start,n){ /* первая дата — start, остальные — ближайшие дни недели ученика */
+const holidays=()=>(D&&D.holidays||[]);
+function layout(s,start,n){ /* первая дата — start, остальные — ближайшие дни недели ученика, пропуская праздники */
   const out=[start];let d=parse(start);
-  while(out.length<n){do d.setDate(d.getDate()+1);while(!s.days.includes(d.getDay()));out.push(iso(d))}
+  const hol=new Set(holidays());
+  while(out.length<n){do d.setDate(d.getDate()+1);while(!s.days.includes(d.getDay())||hol.has(iso(d)));out.push(iso(d))}
   return out}
 function move(s,i,nd,shift){ /* занятие i переносится на nd; при shift остальные запланированные расставляются заново после него */
   const L=s.lessons[i],keep=[],later=[];
@@ -282,7 +287,7 @@ const warnTxt=s=>{const p=(s.lessons||[]).filter(l=>l.status==='planned').map(l=
   return p&&p>e?`<p class="warn">Последнее занятие (${fmt(parse(p))}) позже окончания абонемента (${fmt(parse(e))}). Измените дни занятий или дату начала.</p>`:''};
 const lr=(l,i)=>`<li><div class="lt"><span>${esc(fmtShort(parse(l.date)))}${l.note?' · '+esc(l.note):''}${l.status==='planned'&&l.date<TODAY?' <span class="warn">· отметьте статус</span>':''}</span><span class="row">${l.status==='moved'?`<span class="tag off">Перенесено на ${esc(fmtShort(parse(l.movedTo)))}</span>`:`<select data-a="st" data-i="${i}">${opts(l.status)}</select>`}<button class="ghost" data-a="dell" data-i="${i}" aria-label="Удалить занятие">×</button></span></div>
 ${l.status==='planned'?`<details class="mv"><summary>Перенести</summary><div class="row"><input type="date" name="md${i}"><label class="chk"><input type="checkbox" name="ms${i}" checked> сдвинуть остальные</label><button data-a="mv" data-i="${i}">Перенести</button></div></details>`:''}</li>`;
-const opts=cur=>{const ks=['planned','attended','burned'];if(STATUS[cur]&&!ks.includes(cur))ks.push(cur);
+const opts=cur=>{const ks=['planned','attended','burned','cancelled'];if(STATUS[cur]&&!ks.includes(cur))ks.push(cur);
   return ks.map(k=>`<option value="${k}" ${k===cur?'selected':''}>${STATUS[k].t}</option>`).join('')};
 
 const stu=(c,s)=>`<section class="card" data-c="${c}"><details ${OPEN===c?'open':''}><summary>${esc(s.name)} · код ${esc(c)}</summary>
@@ -303,9 +308,8 @@ ${warnTxt(s)}
 <ul class="list">${(s.lessons||[]).map(lr).join('')}</ul>
 <div class="fm"><label>Дата<input type="date" name="ld" value="${TODAY}"></label><label>Статус<select name="ls">${opts('attended')}</select></label><label>Заметка<input name="ln" placeholder="необязательно"></label></div>
 <div class="row"><button data-a="addl">Добавить занятие</button></div>
-<h2>Чеки</h2>
-<ul class="list">${(s.receipts||[]).map((r,i)=>{r=typeof r==='string'?{file:r}:r;return `<li><a href="${esc(r.file)}" target="_blank" rel="noopener">${esc(r.label||r.file)}</a><button class="ghost" data-a="delr" data-i="${i}" aria-label="Удалить чек">×</button></li>`}).join('')}</ul>
-<label class="up">Загрузить чек (фото, сожмётся автоматически)<input type="file" accept="image/*" data-a="up"></label>
+<h2>История абонементов</h2>
+${(s.history||[]).length?`<ul class="list">${s.history.slice().reverse().map(h=>`<li><span>${h.lessons} зан. · ${h.from?fmt(parse(h.from)):''}${h.to?' — '+fmt(parse(h.to)):''}</span><span class="tag off">посещ. ${h.attended||0} · перенос ${h.moved||0} · сгор. ${h.burned||0}</span></li>`).join('')}</ul>`:'<p class="empty">Пока это первый абонемент.</p>'}
 </details></section>`;
 
 function view(){
@@ -322,9 +326,27 @@ function view(){
     <label>Дата первого занятия<input type="date" name="first"></label></div>
     <div class="row"><button data-a="add">Добавить ученика</button></div>
     <p class="sub">Код из 4 цифр создастся автоматически, его можно поменять в карточке ученика.</p></section>
+
+  <section class="card" data-ab><h2>Добавить абонемент</h2>
+    <p class="sub">Текущий абонемент уйдёт в историю, новый начнётся с чистого расписания.</p>
+    <div class="fm"><label>Ученик<select name="target">${Object.entries(S).map(([c,s])=>`<option value="${esc(c)}">${esc(s.name)}</option>`).join('')||'<option value="">— нет учеников —</option>'}</select></label>
+    <label>Занятий в абонементе<select name="n"><option>8</option><option>12</option></select></label>
+    <label>Стоимость<input name="price" placeholder="12 000 ₽"></label>
+    <label>Дата оплаты<input type="date" name="paid" value="${TODAY}"></label></div>
+    ${chips([])}
+    <div class="fm"><label>Занятий в неделю<select name="pw"><option>2</option><option>3</option></select></label>
+    <label>Дата первого занятия<input type="date" name="first"></label></div>
+    <div class="row"><button data-a="newab">Добавить абонемент</button></div>
+  </section>
+
   ${Object.entries(S).map(([c,s])=>stu(c,s)).join('')}
   <section class="card"><details><summary>Правила отмен и переносов</summary><p class="sub">Одно правило на строку. Общие для всех учеников.</p>
     <textarea name="rules">${esc((D.rules||[]).join('\n'))}</textarea><div class="row"><button data-a="rules">Сохранить правила</button></div></details></section>
+
+  <section class="card"><details><summary>Каникулы и праздники</summary>
+    <p class="sub">По одной дате <code>ГГГГ-ММ-ДД</code> на строку. Автоматическая расстановка и «сдвинуть остальные» будут их пропускать.</p>
+    <textarea name="holidays">${esc((D.holidays||[]).join('\n'))}</textarea><div class="row"><button data-a="holidays">Сохранить нерабочие дни</button></div></details></section>
+
   <section class="card"><details><summary>Настройки</summary>
     <div class="fm"><label>Код преподавателя<input name="admin" value="${esc(D.admin)}" inputmode="numeric"></label></div>
     <div class="row"><button data-a="admin">Сменить код</button><button class="ghost" data-a="out">Отключить GitHub на этом устройстве</button></div></details></section></div>`;
@@ -335,7 +357,7 @@ function onAct(e){
   const el=e.target.closest('[data-a]');if(!el)return;
   const pick=el.tagName==='SELECT'||el.type==='file';
   if((e.type==='click')===pick)return;
-  const a=el.dataset.a,box=el.closest('section'),c=box.dataset.c,s=D.students[c],i=+el.dataset.i;
+  const a=el.dataset.a,box=el.closest('section'),c=box.dataset.c,s=c?D.students[c]:null,i=+el.dataset.i;
   const v=n=>box.querySelector('[name='+n+']').value.trim();
   OPEN=c||null;
   switch(a){
@@ -343,7 +365,7 @@ function onAct(e){
       if(!v('name'))return toast('Введите имя',1);
       const sc=sched(box),first=v('first'),auto=sc.days.length>0&&first;
       if(auto&&sc.days.length!==sc.perWeek)return toast('Отметьте ровно '+sc.perWeek+' дня недели или снимите все отметки',1);
-      act(()=>{const k=newCode(),ns={name:v('name'),plan:{lessons:+v('n'),price:v('price')},paidDate:v('paid'),...sc,lessons:[],receipts:[]};
+      act(()=>{const k=newCode(),ns={name:v('name'),plan:{lessons:+v('n'),price:v('price')},paidDate:v('paid'),...sc,lessons:[],history:[]};
         if(auto)ns.lessons=layout(ns,first,+v('n')).map(d=>({date:d,status:'planned'}));
         D.students[k]=ns;OPEN=k},'Новый ученик');break}
     case 'save':{
@@ -355,8 +377,8 @@ function onAct(e){
       const u=location.origin+location.pathname+'?s='+c;
       navigator.clipboard.writeText(u).then(()=>toast('Ссылка скопирована'),()=>toast(u));break}
     case 'del':
-      if(!confirm('Удалить ученика «'+s.name+'» вместе с чеками?'))return;
-      act(async()=>{for(const r of s.receipts||[]){try{await delFile(typeof r==='string'?r:r.file)}catch(x){}}delete D.students[c];OPEN=null},'Удаление ученика');break;
+      if(!confirm('Удалить ученика «'+s.name+'» вместе с историей?'))return;
+      act(()=>{delete D.students[c];OPEN=null},'Удаление ученика');break;
     case 'addl':
       if(!v('ld'))return toast('Выберите дату',1);
       act(()=>{(s.lessons=s.lessons||[]).push({date:v('ld'),status:v('ls'),...(v('ln')?{note:v('ln')}:{})});
@@ -378,16 +400,28 @@ function onAct(e){
       act(()=>move(s,i,nd,sh),'Перенос занятия: '+s.name);break}
     case 'st':act(()=>{s.lessons[i].status=el.value},'Статус занятия');break;
     case 'dell':act(()=>{s.lessons.splice(i,1)},'Удаление занятия');break;
-    case 'delr':{
-      const r=s.receipts[i];
-      act(async()=>{try{await delFile(typeof r==='string'?r:r.file)}catch(x){}s.receipts.splice(i,1)},'Удаление чека');break}
-    case 'up':{
-      const f=el.files[0];if(!f)return;toast('Загрузка…');
-      act(async()=>{
-        const name='receipts/'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)+'.jpg';
-        await gh(name,'PUT',{message:'Чек: '+s.name,content:await pack(f)});
-        (s.receipts=s.receipts||[]).push({file:name,label:fmt(new Date())})},'Чек: '+s.name);break}
     case 'rules':act(()=>{D.rules=box.querySelector('[name=rules]').value.split('\n').map(x=>x.trim()).filter(Boolean)},'Правила');break;
+    case 'holidays':{
+      const arr=box.querySelector('[name=holidays]').value.split('\n').map(x=>x.trim()).filter(x=>/^\d{4}-\d{2}-\d{2}$/.test(x));
+      act(()=>{D.holidays=arr},'Каникулы и праздники');break}
+    case 'newab':{
+      const t=box.querySelector('[name=target]').value;
+      if(!t||!D.students[t])return toast('Выберите ученика',1);
+      const ns=D.students[t],sc=sched(box),first=v('first');
+      if(!first)return toast('Укажите дату первого занятия',1);
+      if(sc.days.length!==sc.perWeek)return toast('Отметьте ровно '+sc.perWeek+' дня недели',1);
+      const old={...ns};
+      const cnt=k=>(old.lessons||[]).filter(l=>l.status===k).length;
+      act(()=>{
+        const closed={lessons:+old.plan.lessons,attended:cnt('attended'),burned:cnt('burned'),moved:cnt('moved'),cancelled:cnt('cancelled'),
+          from:old.paidDate,to:iso(endDate(old)),price:old.plan.price};
+        ns.history=(ns.history||[]).concat(closed);
+        ns.plan={lessons:+v('n'),price:v('price')};
+        ns.paidDate=v('paid');
+        Object.assign(ns,sc);
+        ns.lessons=layout(ns,first,+v('n')).map(d=>({date:d,status:'planned'}));
+        OPEN=t;
+      },'Новый абонемент: '+ns.name);break}
     case 'admin':{
       const nv=v('admin');
       if(!nv||D.students[nv])return toast('Введите другой код',1);
@@ -429,7 +463,7 @@ function admin(data){
     const st=(data.students||{})[code];
     if(!st) return login('Код не найден. Проверьте, что он введён без ошибок.');
     document.title=st.name+' — личный кабинет';
-    render(st,data.rules);
+    render(st,data.rules,data.holidays||[]);
   }catch(e){
     app.innerHTML='<div class="card login"><h1>Не удалось загрузить данные</h1><p class="sub">Откройте страницу по ссылке с GitHub Pages. При открытии файла прямо с компьютера браузер блокирует загрузку data.json.</p></div>';
   }
