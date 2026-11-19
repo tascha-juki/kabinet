@@ -127,6 +127,54 @@
       ],
       "receipts": []
     },
+    "5491": {
+      "name": "Артем",
+      "plan": {
+        "lessons": 8,
+        "price": "16000"
+      },
+      "paidDate": "2026-11-06",
+      "days": [
+        1,
+        5
+      ],
+      "perWeek": 2,
+      "lessons": [
+        {
+          "date": "2026-11-09",
+          "status": "planned"
+        },
+        {
+          "date": "2026-11-13",
+          "status": "planned"
+        },
+        {
+          "date": "2026-11-16",
+          "status": "planned"
+        },
+        {
+          "date": "2026-11-20",
+          "status": "planned"
+        },
+        {
+          "date": "2026-11-23",
+          "status": "planned"
+        },
+        {
+          "date": "2026-11-27",
+          "status": "planned"
+        },
+        {
+          "date": "2026-11-30",
+          "status": "planned"
+        },
+        {
+          "date": "2026-12-04",
+          "status": "planned"
+        }
+      ],
+      "receipts": []
+    },
     "6570": {
       "name": "Оля",
       "plan": {
