@@ -5,172 +5,846 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Личный кабинет ученика</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#f4f7fb;--card:#fff;--p:#4a90e2;--ps:#ebf3fc;--tx:#2c3e50;--mu:#7f8c8d;--ln:#e1e8ed;
-  --burn:#e74c3c;--burns:#fdf0ed;--r:16px;
-  --shadow:0 2px 12px rgba(0,0,0,0.04);
-  --sidebar-bg: #ffffff;
-  --sidebar-w: 320px; 
-}
-[data-theme=green]{--bg:#f2f9f5;--p:#27ae60;--ps:#e9f7ef;--tx:#1e2e25;--mu:#6e8a78;--ln:#d5ebd9}
-[data-theme=pink]{--bg:#fdf5f7;--p:#e84393;--ps:#fceef4;--tx:#3a1c29;--mu:#8a6e78;--ln:#f5dce7}
-[data-theme=lavender]{--bg:#f8f6fc;--p:#8e44ad;--ps:#f3ebf8;--tx:#2c1d36;--mu:#7a6b85;--ln:#e8ddf1}
-[data-theme=winter]{--bg:#f0f5fa;--p:#5c9ecf;--ps:#e6f2fa;--tx:#2c3e50;--mu:#7f8c8d;--ln:#dce6f0;--burn:#d35400;--burns:#fdebd0}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;transition:background .3s; overflow-x: hidden;}
 
-main{max-width:800px;margin:0 auto;padding:18px 16px 56px;position:relative;}
-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:24px}
-h1{font-size:1.4rem;line-height:1.2;margin:0;font-weight:500}
-h2{font-size:1.05rem;margin:0 0 16px;font-weight:500}
-.sub{color:var(--mu);font-size:.9rem;margin:2px 0 0}
+<style>
+:root {
+  --bg: #f4f7fb;
+  --card: #fff;
+  --p: #4a90e2;
+  --ps: #ebf3fc;
+  --tx: #2c3e50;
+  --mu: #7f8c8d;
+  --ln: #e1e8ed;
+  --burn: #e74c3c;
+  --burns: #fdf0ed;
+  --r: 16px;
+  --shadow: 0 2px 12px rgba(0,0,0,.04);
+  --sidebar-bg: #fff;
+  --sidebar-w: 320px;
+}
+
+[data-theme=green] {
+  --bg: #f2f9f5;
+  --p: #27ae60;
+  --ps: #e9f7ef;
+  --tx: #1e2e25;
+  --mu: #6e8a78;
+  --ln: #d5ebd9;
+}
+
+[data-theme=pink] {
+  --bg: #fdf5f7;
+  --p: #e84393;
+  --ps: #fceef4;
+  --tx: #3a1c29;
+  --mu: #8a6e78;
+  --ln: #f5dce7;
+}
+
+[data-theme=lavender] {
+  --bg: #f8f6fc;
+  --p: #8e44ad;
+  --ps: #f3ebf8;
+  --tx: #2c1d36;
+  --mu: #7a6b85;
+  --ln: #e8ddf1;
+}
+
+[data-theme=winter] {
+  --bg: #f0f5fa;
+  --p: #5c9ecf;
+  --ps: #e6f2fa;
+  --tx: #2c3e50;
+  --mu: #7f8c8d;
+  --ln: #dce6f0;
+  --burn: #d35400;
+  --burns: #fdebd0;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--tx);
+  font: 16px/1.5 "Golos Text", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  transition: background .3s;
+  overflow-x: hidden;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 18px 16px 56px;
+  position: relative;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+h1 {
+  font-size: 1.4rem;
+  line-height: 1.2;
+  margin: 0;
+  font-weight: 500;
+}
+
+h2 {
+  font-size: 1.05rem;
+  margin: 0 0 16px;
+  font-weight: 500;
+}
+
+.sub {
+  color: var(--mu);
+  font-size: .9rem;
+  margin: 2px 0 0;
+}
 
 /* Темы */
-.themes{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.themes button{width:28px;height:28px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--ln);cursor:pointer;padding:0;transition:transform .2s}
-.themes button:hover{transform:scale(1.1)}
-.themes button[aria-pressed=true]{box-shadow:0 0 0 2px var(--tx);transform:scale(1.1)}
-.themes [data-t=blue]{background:#4a90e2}.themes [data-t=green]{background:#27ae60}.themes [data-t=pink]{background:#e84393}.themes [data-t=lavender]{background:#8e44ad}
-.themes [data-t=winter]{background:#5c9ecf;background-image:radial-gradient(circle, #fff 20%, transparent 20%);background-size:6px 6px}
+
+.themes {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.themes button {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px var(--ln);
+  cursor: pointer;
+  padding: 0;
+  transition: transform .2s;
+}
+
+.themes button:hover { transform: scale(1.1); }
+
+.themes button[aria-pressed=true] {
+  box-shadow: 0 0 0 2px var(--tx);
+  transform: scale(1.1);
+}
+
+.themes [data-t=blue] { background: #4a90e2; }
+.themes [data-t=green] { background: #27ae60; }
+.themes [data-t=pink] { background: #e84393; }
+.themes [data-t=lavender] { background: #8e44ad; }
+
+.themes [data-t=winter] {
+  background: #5c9ecf;
+  background-image: radial-gradient(circle, #fff 20%, transparent 20%);
+  background-size: 6px 6px;
+}
 
 /* Снежинки */
-[data-theme=winter] body::before{content:"";position:fixed;inset:0;background-image:radial-gradient(circle, #fff 2px, transparent 2px), radial-gradient(circle, #fff 1px, transparent 1px);background-size:60px 60px, 40px 40px;background-position:0 0, 20px 20px;opacity:0.6;z-index:-1;pointer-events:none;animation:snow 20s linear infinite}
-@keyframes snow{from{background-position:0 0, 20px 20px}to{background-position:0 100vh, 20px calc(100vh + 20px)}}
 
-.card{background:var(--card);border-radius:var(--r);padding:20px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,0.02);transition:transform .2s}
-.card:hover:not(.login){transform:translateY(-1px)}
+[data-theme=winter] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, #fff 2px, transparent 2px),
+    radial-gradient(circle, #fff 1px, transparent 1px);
+  background-size: 60px 60px, 40px 40px;
+  background-position: 0 0, 20px 20px;
+  opacity: .6;
+  z-index: -1;
+  pointer-events: none;
+  animation: snow 20s linear infinite;
+}
 
-.plan{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-end}
-.plan .big{font-size:2rem;font-weight:600;line-height:1;color:var(--p)}
-.plan .price{font-size:1.25rem;font-weight:500}
-.dates{margin-top:16px;padding-top:16px;border-top:1px dashed var(--ln);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.pill{display:inline-block;padding:3px 12px;border-radius:99px;background:var(--ps);color:var(--p);font-size:.85rem;font-weight:500}
-.pill.bad{background:var(--burns);color:var(--burn)}
-.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:8px;margin:8px 0 16px}
-.slot{aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-weight:500;font-size:.9rem;border:2px dashed var(--ln);color:var(--mu)}
-.slot.done{background:var(--p);border:2px solid var(--p);color:#fff}
-.slot.burn{background:repeating-linear-gradient(45deg,var(--burns) 0 6px,#ffd2b8 6px 12px);border:2px solid var(--burn);color:var(--burn)}
-.stats{display:flex;gap:8px;flex-wrap:wrap}
-.stat{flex:1 1 90px;border-radius:12px;background:var(--ps);padding:12px;text-align:center;position:relative}
-.stat b{display:block;font-size:1.4rem;line-height:1.1;font-weight:600}
-.stat span{font-size:.8rem;color:var(--mu)}
-.stat.burn{background:var(--burns)}.stat.burn b{color:var(--burn)}
+@keyframes snow {
+  from { background-position: 0 0, 20px 20px; }
+  to { background-position: 0 100vh, 20px calc(100vh + 20px); }
+}
 
-.cat-on-burn {position: absolute;right: -10px;bottom: -5px;width: 90px;height: auto;pointer-events: none;filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));transition: transform 0.2s;z-index: 2;}
-.stat.burn:hover .cat-on-burn {transform: translateY(-3px) scale(1.05) rotate(-3deg);}
+.card {
+  background: var(--card);
+  border-radius: var(--r);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(0,0,0,.02);
+  transition: transform .2s;
+}
 
-ul.list{list-style:none;margin:0;padding:0}
-ul.list li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--ln);font-size:.95rem}
-ul.list li:last-child{border:0}
-.tag{font-size:.8rem;padding:2px 10px;border-radius:99px;background:var(--ps);color:var(--p);white-space:nowrap}
-.tag.burn{background:var(--burns);color:var(--burn)}
-.tag.off{background:#f0f2f5;color:#7f8c8d}
-.tag.plan{background:#fff;border:1px solid var(--ln);color:var(--mu)}
+.card:hover:not(.login) { transform: translateY(-1px); }
 
-details{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);border:1px solid rgba(0,0,0,0.02);margin-bottom:12px;overflow:hidden}
-details summary{cursor:pointer;font-weight:500;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:18px 20px;background:var(--card);transition:background .2s;user-select:none}
-details summary:hover{background:var(--ps)}
-details summary::-webkit-details-marker{display:none}
-details summary::after{content:"+";font-size:1.2rem;color:var(--p);line-height:1;background:var(--ps);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .2s}
-details[open] summary::after{content:"–";transform:rotate(180deg)}
-details .inner{padding:0 20px 20px 20px}
-details h2{margin-top:16px}
-details ul{margin:0;padding-left:20px;color:var(--tx)}
-details li{margin-bottom:6px}
+.plan {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
 
-.hist{display:flex;flex-direction:column;gap:10px}
-.hist .ab{border:1px solid var(--ln);border-radius:12px;padding:14px;background:var(--ps)}
-.hist .ab .hd{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-weight:500}
-.hist .ab .dt{color:var(--mu);font-size:.82rem;font-weight:400}
-.hist .ab .nums{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.hist .ab .nums span{background:#fff;border-radius:8px;padding:4px 10px;font-size:.85rem;color:var(--mu)}
+.plan .big {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--p);
+}
 
-/* Центрированная форма входа */
-.login{
+.plan .price {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.dates {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--ln);
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 99px;
+  background: var(--ps);
+  color: var(--p);
+  font-size: .85rem;
+  font-weight: 500;
+}
+
+.pill.bad {
+  background: var(--burns);
+  color: var(--burn);
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(48px,1fr));
+  gap: 8px;
+  margin: 8px 0 16px;
+}
+
+.slot {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 500;
+  font-size: .9rem;
+  border: 2px dashed var(--ln);
+  color: var(--mu);
+}
+
+.slot.done {
+  background: var(--p);
+  border: 2px solid var(--p);
+  color: #fff;
+}
+
+.slot.burn {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--burns) 0 6px,
+    #ffd2b8 6px 12px
+  );
+  border: 2px solid var(--burn);
+  color: var(--burn);
+}
+
+.stats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Дополнительное место над статистикой для кота */
+.stats.has-cat {
+  padding-top: 100px;
+}
+
+.stat {
+  flex: 1 1 90px;
+  border-radius: 12px;
+  background: var(--ps);
+  padding: 12px;
+  text-align: center;
+  position: relative;
+}
+
+.stat b {
+  display: block;
+  font-size: 1.4rem;
+  line-height: 1.1;
+  font-weight: 600;
+}
+
+.stat span {
+  font-size: .8rem;
+  color: var(--mu);
+}
+
+.stat.burn {
+  background: var(--burns);
+  position: relative;
+  overflow: visible;
+}
+
+.stat.burn b { color: var(--burn); }
+
+/* Кот над оранжевым блоком, на белом фоне карточки */
+.cat-on-burn {
+  position: absolute;
+  left: 50%;
+  right: auto;
+  bottom: calc(100% + 6px);
+
+  width: 90px;
+  max-width: 100%;
+  height: auto;
+  max-height: 90px;
+  object-fit: contain;
+
+  transform: translateX(-50%);
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,.15));
+  transition: transform .2s;
+  z-index: 2;
+}
+
+.stat.burn:hover .cat-on-burn {
+  transform: translateX(-50%) translateY(-3px) rotate(-3deg);
+}
+
+ul.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--ln);
+  font-size: .95rem;
+}
+
+ul.list li:last-child { border: 0; }
+
+.tag {
+  font-size: .8rem;
+  padding: 2px 10px;
+  border-radius: 99px;
+  background: var(--ps);
+  color: var(--p);
+  white-space: nowrap;
+}
+
+.tag.burn {
+  background: var(--burns);
+  color: var(--burn);
+}
+
+.tag.off {
+  background: #f0f2f5;
+  color: #7f8c8d;
+}
+
+.tag.plan {
+  background: #fff;
+  border: 1px solid var(--ln);
+  color: var(--mu);
+}
+
+details {
+  background: var(--card);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(0,0,0,.02);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: 500;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  background: var(--card);
+  transition: background .2s;
+  user-select: none;
+}
+
+details summary:hover { background: var(--ps); }
+details summary::-webkit-details-marker { display: none; }
+
+details summary::after {
+  content: "+";
+  font-size: 1.2rem;
+  color: var(--p);
+  line-height: 1;
+  background: var(--ps);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .2s;
+}
+
+details[open] summary::after {
+  content: "–";
+  transform: rotate(180deg);
+}
+
+details .inner { padding: 0 20px 20px; }
+details h2 { margin-top: 16px; }
+
+details ul {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--tx);
+}
+
+details li { margin-bottom: 6px; }
+
+.hist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hist .ab {
+  border: 1px solid var(--ln);
+  border-radius: 12px;
+  padding: 14px;
+  background: var(--ps);
+}
+
+.hist .ab .hd {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-weight: 500;
+}
+
+.hist .ab .dt {
+  color: var(--mu);
+  font-size: .82rem;
+  font-weight: 400;
+}
+
+.hist .ab .nums {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.hist .ab .nums span {
+  background: #fff;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: .85rem;
+  color: var(--mu);
+}
+
+/* Форма входа */
+
+.login {
   position: fixed !important;
-  top: 50% !important; 
+  top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
-  width: 100%;
+  width: calc(100% - 32px);
   max-width: 380px;
   text-align: center;
   z-index: 10;
   margin: 0 !important;
 }
-.login input{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--ln);font:inherit;margin:10px 0;text-align:center;background:var(--bg)}
-.login button{width:100%;padding:12px;border:0;border-radius:12px;background:var(--p);color:#fff;font:inherit;font-weight:500;cursor:pointer;transition:opacity .2s}
-.login button:hover{opacity:.9}
-.err{color:var(--burn);font-size:.9rem;min-height:1.3em}
-.empty{color:var(--mu);font-size:.92rem;margin:0}
 
-input,select,textarea{font:inherit;padding:10px 12px;border:1.5px solid var(--ln);border-radius:10px;background:var(--bg);color:var(--tx);width:100%;min-width:0;transition:border .2s}
-input:focus,select:focus,textarea:focus{border-color:var(--p);outline:none}
-textarea{min-height:160px;resize:vertical}
-button{font:inherit;font-weight:500;padding:10px 16px;border:0;border-radius:10px;background:var(--p);color:#fff;cursor:pointer;transition:opacity .2s}
-button:hover{opacity:.9}
-button.ghost{background:var(--ps);color:var(--p)}
-button.red{background:var(--burns);color:var(--burn)}
-.fm{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:12px 0}
-.fm label{display:flex;flex-direction:column;gap:4px;font-size:.82rem;color:var(--mu)}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}
-ul.list select{width:auto;padding:6px 10px}
-ul.list li .row{margin:0}
-a{color:var(--p);text-decoration:none}
-ul.list li{display:flex}
-.lt{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%}
-.mv{margin-top:8px}
-.mv summary{font-weight:400;font-size:.88rem;color:var(--p);padding:0;background:none;display:inline-block}
-.mv summary::after{display:none}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
-.chip{position:relative;display:inline-flex;align-items:center;padding:8px 14px;border-radius:99px;border:1.5px solid var(--ln);background:var(--card);cursor:pointer;font-size:.9rem;transition:all .2s}
-.chip:has(input:checked){background:var(--p);border-color:var(--p);color:#fff}
-.chip input{position:absolute;opacity:0;width:0;height:0}
-.chk{display:flex;align-items:center;gap:6px;font-size:.88rem;color:var(--mu)}
-input[type=checkbox]{width:auto;padding:0;accent-color:var(--p)}
-.rng{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;margin:12px 0}
-.rng label{display:flex;flex-direction:column;gap:4px;font-size:.82rem;color:var(--mu)}
-.holrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--ln)}
-.holrow:last-child{border:0}
-.warn{color:var(--burn);font-size:.9rem}
+.login input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px solid var(--ln);
+  font: inherit;
+  margin: 10px 0;
+  text-align: center;
+  background: var(--bg);
+}
 
-/* Notion-style Sidebar */
-.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--sidebar-bg);border-right:1px solid var(--ln);z-index:100;transform:translateX(-100%);transition:transform .3s cubic-bezier(0.4, 0, 0.2, 1);box-shadow:2px 0 12px rgba(0,0,0,0.05);display:flex;flex-direction:column}
-.sidebar.open{transform:translateX(0)}
-.sidebar .sb-header{padding:16px 20px;display:flex;align-items:center;font-weight:600;font-size:1.1rem;border-bottom:1px solid var(--ln)}
-.sidebar .sb-content{padding:16px 12px;overflow-y:auto;flex-grow:1}
-.sb-section{font-size:.75rem;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin:20px 12px 8px;display:flex;justify-content:space-between;align-items:center}
-.sidebar .inner{padding:0 12px 20px 12px}
-.sidebar details{background:transparent;box-shadow:none;border:0;margin-bottom:0}
-.sidebar details summary{padding:8px 12px;border-radius:6px;font-weight:500;font-size:.95rem}
-.sidebar details summary::after{display:none}
-.sidebar details summary:hover{background:var(--ps)}
-.sidebar-toggle-btn{background:transparent;border:none;color:var(--mu);cursor:pointer;padding:8px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background .2s;font-size:1.2rem}
-.sidebar-toggle-btn:hover{background:var(--ps);color:var(--tx)}
-.main-header-btn{margin-right:12px}
-.header-left{display:flex;align-items:center}
+.login button {
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--p);
+  color: #fff;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity .2s;
+}
 
-/* Overlay */
-#overlay{position:fixed;inset:0;background:rgba(0,0,0,0.2);z-index:90;opacity:0;pointer-events:none;transition:opacity .3s}
-#overlay.on{opacity:1;pointer-events:auto}
+.login button:hover { opacity: .9; }
 
-#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--tx);color:#fff;padding:12px 20px;border-radius:12px;z-index:1000;display:none;max-width:90vw;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.1);font-size:.9rem}
-#toast.bad{background:var(--burn)}
-button:focus-visible,summary:focus-visible,input:focus-visible,figure:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+.err {
+  color: var(--burn);
+  font-size: .9rem;
+  min-height: 1.3em;
+}
+
+.empty {
+  color: var(--mu);
+  font-size: .92rem;
+  margin: 0;
+}
+
+input, select, textarea {
+  font: inherit;
+  padding: 10px 12px;
+  border: 1.5px solid var(--ln);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--tx);
+  width: 100%;
+  min-width: 0;
+  transition: border .2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--p);
+  outline: none;
+}
+
+textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+button {
+  font: inherit;
+  font-weight: 500;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--p);
+  color: #fff;
+  cursor: pointer;
+  transition: opacity .2s;
+}
+
+button:hover { opacity: .9; }
+
+button.ghost {
+  background: var(--ps);
+  color: var(--p);
+}
+
+button.red {
+  background: var(--burns);
+  color: var(--burn);
+}
+
+.fm {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.fm label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: .82rem;
+  color: var(--mu);
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 12px 0;
+}
+
+ul.list select {
+  width: auto;
+  padding: 6px 10px;
+}
+
+ul.list li .row { margin: 0; }
+
+a {
+  color: var(--p);
+  text-decoration: none;
+}
+
+.lt {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.mv { margin-top: 8px; }
+
+.mv summary {
+  font-weight: 400;
+  font-size: .88rem;
+  color: var(--p);
+  padding: 0;
+  background: none;
+  display: inline-block;
+}
+
+.mv summary::after { display: none; }
+
+.chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 99px;
+  border: 1.5px solid var(--ln);
+  background: var(--card);
+  cursor: pointer;
+  font-size: .9rem;
+  transition: all .2s;
+}
+
+.chip:has(input:checked) {
+  background: var(--p);
+  border-color: var(--p);
+  color: #fff;
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.chk {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .88rem;
+  color: var(--mu);
+}
+
+input[type=checkbox] {
+  width: auto;
+  padding: 0;
+  accent-color: var(--p);
+}
+
+.rng {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  align-items: end;
+  margin: 12px 0;
+}
+
+.rng label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: .82rem;
+  color: var(--mu);
+}
+
+.holrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--ln);
+}
+
+.holrow:last-child { border: 0; }
+
+.warn {
+  color: var(--burn);
+  font-size: .9rem;
+}
+
+/* Боковая панель */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-w);
+  max-width: 100vw;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--ln);
+  z-index: 100;
+  transform: translateX(-100%);
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+  box-shadow: 2px 0 12px rgba(0,0,0,.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.open { transform: translateX(0); }
+
+.sidebar .sb-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-bottom: 1px solid var(--ln);
+}
+
+.sidebar .sb-content {
+  padding: 16px 12px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.sb-section {
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--mu);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin: 20px 12px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar .inner { padding: 0 12px 20px; }
+
+.sidebar details {
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+  margin-bottom: 0;
+}
+
+.sidebar details summary {
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: .95rem;
+}
+
+.sidebar details summary::after { display: none; }
+.sidebar details summary:hover { background: var(--ps); }
+
+.sidebar-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--mu);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s;
+  font-size: 1.2rem;
+}
+
+.sidebar-toggle-btn:hover {
+  background: var(--ps);
+  color: var(--tx);
+}
+
+.main-header-btn { margin-right: 12px; }
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.2);
+  z-index: 90;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s;
+}
+
+#overlay.on {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  background: var(--tx);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  z-index: 1000;
+  display: none;
+  max-width: 90vw;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,.1);
+  font-size: .9rem;
+}
+
+#toast.bad { background: var(--burn); }
+
+button:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+figure:focus-visible {
+  outline: 2px solid var(--p);
+  outline-offset: 2px;
+}
 </style>
 </head>
+
 <body>
 <div id="overlay"></div>
+
 <aside class="sidebar" id="sidebar">
   <div class="sb-header">
     <span>Настройки</span>
   </div>
-  <div class="sb-content" id="sidebar-content">
-    <!-- Заполняется через JS -->
-  </div>
+  <div class="sb-content" id="sidebar-content"></div>
 </aside>
 
 <main id="app"></main>
@@ -180,517 +854,1550 @@ button:focus-visible,summary:focus-visible,input:focus-visible,figure:focus-visi
 const $ = s => document.querySelector(s);
 const app = $('#app');
 const MS = 86400000;
+
 const STATUS = {
-  attended:{t:'Проведено',c:''},
-  burned:{t:'Сгорело',c:'burn'},
-  moved:{t:'Перенесено',c:'off'},
-  planned:{t:'Запланировано',c:'plan'}
+  attended: { t: 'Проведено', c: '' },
+  burned: { t: 'Сгорело', c: 'burn' },
+  moved: { t: 'Перенесено', c: 'off' },
+  planned: { t: 'Запланировано', c: 'plan' }
 };
 
-function esc(s){return String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function parse(d){const [y,m,x]=d.split('-').map(Number);return new Date(y,m-1,x)}
-function fmt(d){return d.toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'})}
-function fmtShort(d){return d.toLocaleDateString('ru-RU',{day:'numeric',month:'short',weekday:'short'})}
-function plural(n,a,b,c){const m=n%100,k=n%10;return m>10&&m<15?c:k===1?a:k>1&&k<5?b:c}
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[c]));
+}
+
+function parse(d) {
+  const [y, m, x] = d.split('-').map(Number);
+  return new Date(y, m - 1, x);
+}
+
+function fmt(d) {
+  return d.toLocaleDateString('ru-RU', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+}
+
+function fmtShort(d) {
+  return d.toLocaleDateString('ru-RU', {
+    day: 'numeric',
+    month: 'short',
+    weekday: 'short'
+  });
+}
+
+function plural(n, a, b, c) {
+  const m = n % 100;
+  const k = n % 10;
+  return m > 10 && m < 15 ? c : k === 1 ? a : k > 1 && k < 5 ? b : c;
+}
 
 /* Боковая панель */
-function toggleSidebar(){
-  const sb=$('#sidebar'), ov=$('#overlay'), isOpen=sb.classList.contains('open');
-  if(isOpen){
+
+function toggleSidebar() {
+  const sb = $('#sidebar');
+  const ov = $('#overlay');
+  const isOpen = sb.classList.contains('open');
+
+  if (isOpen) {
     sb.classList.remove('open');
     ov.classList.remove('on');
     document.body.classList.remove('sb-open');
-  }else{
+  } else {
     sb.classList.add('open');
-    if(window.innerWidth<850) ov.classList.add('on');
+    if (window.innerWidth < 850) ov.classList.add('on');
     document.body.classList.add('sb-open');
   }
 }
+
 $('#overlay').onclick = toggleSidebar;
 
-/* темы */
-function setTheme(t){
-  document.documentElement.dataset.theme=t;
-  try{localStorage.setItem('theme',t)}catch(e){}
-  document.querySelectorAll('.themes button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===t));
+/* Темы */
+
+function setTheme(t) {
+  document.documentElement.dataset.theme = t;
+
+  try {
+    localStorage.setItem('theme', t);
+  } catch (e) {}
+
+  document.querySelectorAll('.themes button').forEach(b => {
+    b.setAttribute('aria-pressed', b.dataset.t === t);
+  });
 }
-function themeSwitch(){
-  return `<div class="themes" role="group" aria-label="Цвет оформления">
-    <button data-t="blue" aria-label="Голубая тема"></button>
-    <button data-t="green" aria-label="Зелёная тема"></button>
-    <button data-t="pink" aria-label="Розовая тема"></button>
-    <button data-t="lavender" aria-label="Лавандовая тема"></button>
-    <button data-t="winter" aria-label="Новогодняя тема" title="Новогоднее настроение"></button>
-    </div>`;
+
+function themeSwitch() {
+  return `
+    <div class="themes" role="group" aria-label="Цвет оформления">
+      <button data-t="blue" aria-label="Голубая тема"></button>
+      <button data-t="green" aria-label="Зелёная тема"></button>
+      <button data-t="pink" aria-label="Розовая тема"></button>
+      <button data-t="lavender" aria-label="Лавандовая тема"></button>
+      <button
+        data-t="winter"
+        aria-label="Новогодняя тема"
+        title="Новогоднее настроение"
+      ></button>
+    </div>
+  `;
 }
-function bindThemes(){
-  document.querySelectorAll('.themes button').forEach(b=>b.onclick=()=>setTheme(b.dataset.t));
+
+function bindThemes() {
+  document.querySelectorAll('.themes button').forEach(b => {
+    b.onclick = () => setTheme(b.dataset.t);
+  });
+
   setTheme(document.documentElement.dataset.theme);
 }
-try{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
 
-/* вход по коду */
-function login(msg){
-  app.innerHTML=`
-  <header>
-    <div class="header-left"><button class="sidebar-toggle-btn main-header-btn" onclick="toggleSidebar()">☰</button></div>
-  </header>
-  
-  <div class="card login">
-    <h1>Личный кабинет</h1>
-    <p class="sub">Введите код, который прислал преподаватель</p>
-    <form id="f">
-      <input id="code" autocomplete="off" inputmode="numeric" maxlength="8" placeholder="Код" aria-label="Код ученика">
-      <div class="err">${esc(msg||'')}</div>
-      <button>Войти</button>
-    </form>
-  </div>`;
-  
+try {
+  const t = localStorage.getItem('theme');
+  if (t) document.documentElement.dataset.theme = t;
+} catch (e) {}
+
+/* Вход по коду */
+
+function login(msg) {
+  app.innerHTML = `
+    <header>
+      <div class="header-left">
+        <button
+          class="sidebar-toggle-btn main-header-btn"
+          onclick="toggleSidebar()"
+          aria-label="Открыть меню"
+        >☰</button>
+      </div>
+    </header>
+
+    <div class="card login">
+      <h1>Личный кабинет</h1>
+      <p class="sub">Введите код, который прислал преподаватель</p>
+
+      <form id="f">
+        <input
+          id="code"
+          autocomplete="off"
+          inputmode="numeric"
+          maxlength="8"
+          placeholder="Код"
+          aria-label="Код ученика"
+        >
+        <div class="err">${esc(msg || '')}</div>
+        <button>Войти</button>
+      </form>
+    </div>
+  `;
+
   $('#sidebar-content').innerHTML = `
     <div class="sb-section">Цвет оформления</div>
     <div class="inner">${themeSwitch()}</div>
   `;
+
   bindThemes();
-  $('#f').onsubmit=e=>{e.preventDefault();const c=$('#code').value.trim();if(c)location.search='?s='+encodeURIComponent(c)};
+
+  $('#f').onsubmit = e => {
+    e.preventDefault();
+    const c = $('#code').value.trim();
+    if (c) location.search = '?s=' + encodeURIComponent(c);
+  };
 }
 
-/* кабинет ученика */
-function render(st, rules, holidays){
+/* Кабинет ученика */
+
+function render(st, rules, holidays) {
   const total = st.plan.lessons;
-  const L = (st.lessons||[]).slice().sort((a,b)=>a.date.localeCompare(b.date));
-  const cnt = k => L.filter(l=>l.status===k).length;
-  const done = cnt('attended'), burned = cnt('burned');
-  const left = Math.max(total-done-burned,0);
+  const L = (st.lessons || [])
+    .slice()
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  const cnt = k => L.filter(l => l.status === k).length;
+  const done = cnt('attended');
+  const burned = cnt('burned');
+  const left = Math.max(total - done - burned, 0);
 
   const from = parse(st.paidDate);
   const to = endDate(st);
-  const today = new Date(); today.setHours(0,0,0,0);
-  const days = Math.round((to-today)/MS);
-  const expired = days<0;
-  const next = L.find(l=>l.status==='planned'&&parse(l.date)>=today);
-  const daysTxt = expired ? 'Срок истёк' : days===0 ? 'Последний день' : `Осталось ${days} ${plural(days,'день','дня','дней')}`;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-  let slots='';
-  for(let i=0;i<Math.max(total,done+burned);i++){
-    const cls = i<done?'done':i<done+burned?'burn':'';
-    const label = i<done?'проведён':i<done+burned?'сгорел':'свободен';
-    slots+=`<div class="slot ${cls}" title="${label}" aria-label="Занятие ${i+1}: ${label}">${i+1}</div>`;
+  const days = Math.round((to - today) / MS);
+  const expired = days < 0;
+  const next = L.find(l => l.status === 'planned' && parse(l.date) >= today);
+
+  const daysTxt = expired
+    ? 'Срок истёк'
+    : days === 0
+      ? 'Последний день'
+      : `Осталось ${days} ${plural(days, 'день', 'дня', 'дней')}`;
+
+  let slots = '';
+
+  for (let i = 0; i < Math.max(total, done + burned); i++) {
+    const cls = i < done ? 'done' : i < done + burned ? 'burn' : '';
+    const label = i < done
+      ? 'проведён'
+      : i < done + burned
+        ? 'сгорел'
+        : 'свободен';
+
+    slots += `
+      <div
+        class="slot ${cls}"
+        title="${label}"
+        aria-label="Занятие ${i + 1}: ${label}"
+      >${i + 1}</div>
+    `;
   }
 
-  const lessons = L.length ? `<ul class="list">${L.map(l=>{
-    const s=STATUS[l.status]||{t:l.status,c:'plan'};
-    return `<li><span>${esc(fmtShort(parse(l.date)))}${l.note?` <span class="sub">· ${esc(l.note)}</span>`:''}</span><span class="tag ${s.c}">${s.t}${l.movedTo?' на '+esc(fmtShort(parse(l.movedTo))):''}</span></li>`;
-  }).join('')}</ul>` : '<p class="empty">Занятий пока нет.</p>';
+  const lessons = L.length
+    ? `<ul class="list">${L.map(l => {
+        const s = STATUS[l.status] || { t: l.status, c: 'plan' };
 
-  const hist = (st.history||[]);
-  const histHTML = hist.length ? `<div class="hist">${hist.slice().reverse().map(h=>`
-    <div class="ab">
-      <div class="hd"><span>${h.lessons} ${plural(h.lessons,'занятие','занятия','занятий')}</span>
-        <span class="dt">${h.from?fmt(parse(h.from)):''}${h.to?' — '+fmt(parse(h.to)):''}</span></div>
-      <div class="nums">
-        <span>посещено: ${h.attended||0}</span>
-        <span>перенесено: ${h.moved||0}</span>
-        <span>сгорело: ${h.burned||0}</span>
-        ${h.price?`<span>${esc(h.price)}</span>`:''}
+        return `
+          <li>
+            <span>
+              ${esc(fmtShort(parse(l.date)))}
+              ${l.note ? `<span class="sub">· ${esc(l.note)}</span>` : ''}
+            </span>
+
+            <span class="tag ${s.c}">
+              ${esc(s.t)}
+              ${l.movedTo ? ' на ' + esc(fmtShort(parse(l.movedTo))) : ''}
+            </span>
+          </li>
+        `;
+      }).join('')}</ul>`
+    : '<p class="empty">Занятий пока нет.</p>';
+
+  const hist = st.history || [];
+
+  const histHTML = hist.length
+    ? `
+      <div class="hist">
+        ${hist.slice().reverse().map(h => `
+          <div class="ab">
+            <div class="hd">
+              <span>
+                ${h.lessons}
+                ${plural(h.lessons, 'занятие', 'занятия', 'занятий')}
+              </span>
+              <span class="dt">
+                ${h.from ? fmt(parse(h.from)) : ''}
+                ${h.to ? ' — ' + fmt(parse(h.to)) : ''}
+              </span>
+            </div>
+            <div class="nums">
+              <span>посещено: ${h.attended || 0}</span>
+              <span>перенесено: ${h.moved || 0}</span>
+              <span>сгорело: ${h.burned || 0}</span>
+              ${h.price ? `<span>${esc(h.price)}</span>` : ''}
+            </div>
+          </div>
+        `).join('')}
       </div>
-    </div>`).join('')}</div>` : '<p class="empty">Пока это первый абонемент.</p>';
+    `
+    : '<p class="empty">Пока это первый абонемент.</p>';
 
-  const hs = (holidays||[])
-    .map(h=>typeof h==='string'?{from:h,to:h}:h)
-    .filter(h=>h.from&&h.to)
-    .map(h=>({from:parse(h.from),to:parse(h.to)}))
-    .filter(h=>h.to>=from&&h.from<=to)
-    .sort((a,b)=>a.from-b.from)
-    .slice(0,6);
-  const holHTML = hs.length ? `<ul class="list">${hs.map(h=>`<li><span>${fmtShort(h.from)}${h.from.getTime()!==h.to.getTime()?' — '+fmtShort(h.to):''}</span><span class="tag off">нерабочие</span></li>`).join('')}</ul>`
+  const hs = (holidays || [])
+    .map(h => typeof h === 'string' ? { from: h, to: h } : h)
+    .filter(h => h.from && h.to)
+    .map(h => ({ from: parse(h.from), to: parse(h.to) }))
+    .filter(h => h.to >= from && h.from <= to)
+    .sort((a, b) => a.from - b.from)
+    .slice(0, 6);
+
+  const holHTML = hs.length
+    ? `
+      <ul class="list">
+        ${hs.map(h => `
+          <li>
+            <span>
+              ${fmtShort(h.from)}
+              ${h.from.getTime() !== h.to.getTime()
+                ? ' — ' + fmtShort(h.to)
+                : ''}
+            </span>
+            <span class="tag off">нерабочие</span>
+          </li>
+        `).join('')}
+      </ul>
+    `
     : '<p class="empty">На этот абонемент нерабочих дней нет.</p>';
 
   $('#sidebar-content').innerHTML = `
     <div class="sb-section">Цвет оформления</div>
     <div class="inner">${themeSwitch()}</div>
-    
+
     <div class="sb-section">Нерабочие дни</div>
-    <div class="inner">
-      ${holHTML}
-    </div>
+    <div class="inner">${holHTML}</div>
   `;
 
-  const isAsya = st.name.trim().toLowerCase() === 'ася';
-  const catImg = (isAsya && burned > 0) ? `<img src="cat.png" alt="Котик" class="cat-on-burn">` : '';
+  /* Кот показывается у Аси, даже если сгоревших занятий нет */
+  const isAsya = String(st.name ?? '').trim().toLowerCase() === 'ася';
 
-  app.innerHTML=`
-  <header>
-    <div class="header-left">
-      <button class="sidebar-toggle-btn main-header-btn" onclick="toggleSidebar()" aria-label="Открыть меню">☰</button>
-      <div><h1>${esc(st.name)}</h1><p class="sub">Личный кабинет ученика</p></div>
-    </div>
-  </header>
+  const catImg = isAsya
+    ? '<img src="./cat.png" alt="Котик" class="cat-on-burn">'
+    : '';
 
-  <section class="card">
-    <div class="plan">
-      <div><div class="sub">Абонемент</div><div class="big">${total} ${plural(total,'занятие','занятия','занятий')}</div></div>
-      <div class="price">${esc(st.plan.price)}</div>
-    </div>
-    <div class="dates">
-      <div><div class="sub">Действует</div>${fmt(from)} — ${fmt(to)}</div>
-      <span class="pill ${expired?'bad':''}">${daysTxt}</span>
-    </div>
-  </section>
+  app.innerHTML = `
+    <header>
+      <div class="header-left">
+        <button
+          class="sidebar-toggle-btn main-header-btn"
+          onclick="toggleSidebar()"
+          aria-label="Открыть меню"
+        >☰</button>
 
-  <section class="card">
-    <h2>Занятия</h2>
-    ${next?`<p><span class="pill">Ближайшее: ${esc(fmtShort(parse(next.date)))}</span></p>`:''}
-    <div class="slots" role="img" aria-label="Проведено ${done}, сгорело ${burned}, осталось ${left}">${slots}</div>
-    <div class="stats">
-      <div class="stat"><b>${done}</b><span>посещено</span></div>
-      <div class="stat"><b>${left}</b><span>осталось</span></div>
-      <div class="stat burn">
-        <b>${burned}</b><span>сгорело</span>
-        ${catImg}
+        <div>
+          <h1>${esc(st.name)}</h1>
+          <p class="sub">Личный кабинет ученика</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </header>
 
-  <section class="card"><h2>История</h2>${lessons}</section>
-  <section class="card"><h2>История абонементов</h2>${histHTML}</section>
-  
-  <section class="card"><details><summary>Правила отмен и переносов</summary>
-    <div class="inner"><ul>${(rules||[]).map(r=>`<li>${esc(r)}</li>`).join('')}</ul></div>
-  </details></section>
+    <section class="card">
+      <div class="plan">
+        <div>
+          <div class="sub">Абонемент</div>
+          <div class="big">
+            ${total} ${plural(total, 'занятие', 'занятия', 'занятий')}
+          </div>
+        </div>
+        <div class="price">${esc(st.plan.price)}</div>
+      </div>
+
+      <div class="dates">
+        <div>
+          <div class="sub">Действует</div>
+          ${fmt(from)} — ${fmt(to)}
+        </div>
+        <span class="pill ${expired ? 'bad' : ''}">${daysTxt}</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Занятия</h2>
+
+      ${next ? `
+        <p>
+          <span class="pill">
+            Ближайшее: ${esc(fmtShort(parse(next.date)))}
+          </span>
+        </p>
+      ` : ''}
+
+      <div
+        class="slots"
+        role="img"
+        aria-label="Проведено ${done}, сгорело ${burned}, осталось ${left}"
+      >${slots}</div>
+
+      <div class="stats${catImg ? ' has-cat' : ''}">
+        <div class="stat">
+          <b>${done}</b>
+          <span>посещено</span>
+        </div>
+
+        <div class="stat">
+          <b>${left}</b>
+          <span>осталось</span>
+        </div>
+
+        <div class="stat burn">
+          <b>${burned}</b>
+          <span>сгорело</span>
+          ${catImg}
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>История</h2>
+      ${lessons}
+    </section>
+
+    <section class="card">
+      <h2>История абонементов</h2>
+      ${histHTML}
+    </section>
+
+    <section class="card">
+      <details>
+        <summary>Правила отмен и переносов</summary>
+        <div class="inner">
+          <ul>
+            ${(rules || []).map(r => `<li>${esc(r)}</li>`).join('')}
+          </ul>
+        </div>
+      </details>
+    </section>
   `;
 
   bindThemes();
 }
 
-/* ===== режим преподавателя ===== */
-let D,SHA,R,CFG,OPEN=null,TK='',tt;
-const tok=()=>{try{return localStorage.getItem('gh_token')||TK}catch(e){return TK}};
-const TODAY=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
-const dec=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\s/g,'')),c=>c.charCodeAt(0)));
-const enc=s=>{let b='';new TextEncoder().encode(s).forEach(x=>b+=String.fromCharCode(x));return btoa(b)};
-function toast(m,bad){const t=$('#toast');t.textContent=m;t.className=bad?'bad':'';t.style.display='block';clearTimeout(tt);tt=setTimeout(()=>t.style.display='none',bad?6000:3500)}
-async function gh(path,method='GET',body){
-  const r=await fetch('https://api.github.com/repos/'+R+'/contents/'+path,{method,
-    headers:{Authorization:'Bearer '+tok(),Accept:'application/vnd.github+json'},
-    body:body?JSON.stringify(body):undefined});
-  const j=await r.json();
-  if(!r.ok) throw new Error(r.status===401?'Токен не подходит или истёк':(r.status===403||r.status===404)?'Нет доступа к репозиторию '+R+'. Проверьте права токена':(r.status===409||r.status===422)?'Данные изменились на GitHub. Обновите страницу':(j.message||r.status));
+/* Режим преподавателя */
+
+let D, SHA, R, CFG, OPEN = null, TK = '', tt;
+
+const tok = () => {
+  try {
+    return localStorage.getItem('gh_token') || TK;
+  } catch (e) {
+    return TK;
+  }
+};
+
+const TODAY = new Date(
+  Date.now() - new Date().getTimezoneOffset() * 6e4
+).toISOString().slice(0, 10);
+
+const dec = s => new TextDecoder().decode(
+  Uint8Array.from(
+    atob(s.replace(/\s/g, '')),
+    c => c.charCodeAt(0)
+  )
+);
+
+const enc = s => {
+  let b = '';
+  new TextEncoder().encode(s).forEach(x => {
+    b += String.fromCharCode(x);
+  });
+  return btoa(b);
+};
+
+function toast(m, bad) {
+  const t = $('#toast');
+  t.textContent = m;
+  t.className = bad ? 'bad' : '';
+  t.style.display = 'block';
+
+  clearTimeout(tt);
+  tt = setTimeout(() => {
+    t.style.display = 'none';
+  }, bad ? 6000 : 3500);
+}
+
+async function gh(path, method = 'GET', body) {
+  const r = await fetch(
+    'https://api.github.com/repos/' + R + '/contents/' + path,
+    {
+      method,
+      headers: {
+        Authorization: 'Bearer ' + tok(),
+        Accept: 'application/vnd.github+json'
+      },
+      body: body ? JSON.stringify(body) : undefined
+    }
+  );
+
+  const j = await r.json();
+
+  if (!r.ok) {
+    throw new Error(
+      r.status === 401
+        ? 'Токен не подходит или истёк'
+        : r.status === 403 || r.status === 404
+          ? 'Нет доступа к репозиторию ' + R + '. Проверьте права токена'
+          : r.status === 409 || r.status === 422
+            ? 'Данные изменились на GitHub. Обновите страницу'
+            : j.message || r.status
+    );
+  }
+
   return j;
 }
-async function load(){const j=await gh('data.json');SHA=j.sha;D=JSON.parse(dec(j.content));D.students=D.students||{};D.holidays=normHolidays(D.holidays);D.rules=D.rules||[]}
-async function save(msg){const j=await gh('data.json','PUT',{message:msg,content:enc(JSON.stringify(D,null,2)),sha:SHA});SHA=j.content.sha}
-async function act(fn,msg){
-  try{await fn();await save(msg);view();toast('Сохранено')}
-  catch(e){toast(e.message,1);try{await load()}catch(x){}view()}
+
+async function load() {
+  const j = await gh('data.json');
+  SHA = j.sha;
+  D = JSON.parse(dec(j.content));
+  D.students = D.students || {};
+  D.holidays = normHolidays(D.holidays);
+  D.rules = D.rules || [];
 }
-const newCode=()=>{let c;do c=String(1000+Math.floor(Math.random()*9000));while(D.students[c]||c===D.admin);return c};
 
-const DN=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
-const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
-const byDate=(a,b)=>a.date.localeCompare(b.date);
-function endDate(st){if(st.validTo)return parse(st.validTo);const d=parse(st.paidDate);d.setDate(d.getDate()+(st.validDays||40));return d}
+async function save(msg) {
+  const j = await gh('data.json', 'PUT', {
+    message: msg,
+    content: enc(JSON.stringify(D, null, 2)),
+    sha: SHA
+  });
 
-function normHolidays(arr){
-  const out=[];
-  (arr||[]).forEach(h=>{
-    if(typeof h==='string'){
-      if(/^\d{4}-\d{2}-\d{2}$/.test(h)) out.push({from:h,to:h});
-    }else if(h&&h.from&&h.to&&/^\d{4}-\d{2}-\d{2}$/.test(h.from)&&/^\d{4}-\d{2}-\d{2}$/.test(h.to)){
-      out.push({from:h.from,to:h.to>=h.from?h.to:h.from});
+  SHA = j.content.sha;
+}
+
+async function act(fn, msg) {
+  try {
+    await fn();
+    await save(msg);
+    view();
+    toast('Сохранено');
+  } catch (e) {
+    toast(e.message, 1);
+
+    try {
+      await load();
+    } catch (x) {}
+
+    view();
+  }
+}
+
+const newCode = () => {
+  let c;
+
+  do {
+    c = String(1000 + Math.floor(Math.random() * 9000));
+  } while (D.students[c] || c === String(D.admin));
+
+  return c;
+};
+
+const DN = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+
+const iso = d => new Date(
+  d.getTime() - d.getTimezoneOffset() * 6e4
+).toISOString().slice(0, 10);
+
+const byDate = (a, b) => a.date.localeCompare(b.date);
+
+function endDate(st) {
+  if (st.validTo) return parse(st.validTo);
+
+  const d = parse(st.paidDate);
+  d.setDate(d.getDate() + (st.validDays || 40));
+  return d;
+}
+
+function normHolidays(arr) {
+  const out = [];
+
+  (arr || []).forEach(h => {
+    if (typeof h === 'string') {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(h)) {
+        out.push({ from: h, to: h });
+      }
+    } else if (
+      h &&
+      h.from &&
+      h.to &&
+      /^\d{4}-\d{2}-\d{2}$/.test(h.from) &&
+      /^\d{4}-\d{2}-\d{2}$/.test(h.to)
+    ) {
+      out.push({
+        from: h.from,
+        to: h.to >= h.from ? h.to : h.from
+      });
     }
   });
-  return out.sort((a,b)=>a.from.localeCompare(b.from));
+
+  return out.sort((a, b) => a.from.localeCompare(b.from));
 }
-function holidaySet(){
-  const s=new Set();
-  (D&&D.holidays||[]).forEach(h=>{
-    const a=parse(h.from),b=parse(h.to);
-    for(let d=new Date(a);d<=b;d.setDate(d.getDate()+1)) s.add(iso(d));
+
+function holidaySet() {
+  const s = new Set();
+
+  ((D && D.holidays) || []).forEach(h => {
+    const a = parse(h.from);
+    const b = parse(h.to);
+
+    for (let d = new Date(a); d <= b; d.setDate(d.getDate() + 1)) {
+      s.add(iso(d));
+    }
   });
+
   return s;
 }
-function layout(s,start,n){
-  const out=[start];let d=parse(start);
-  const hol=holidaySet();
-  while(out.length<n){do d.setDate(d.getDate()+1);while(!s.days.includes(d.getDay())||hol.has(iso(d)));out.push(iso(d))}
-  return out}
-function move(s,i,nd,shift){
-  const L=s.lessons[i],keep=[],later=[];
-  s.lessons.forEach((l,j)=>{if(j!==i)(shift&&l.status==='planned'&&l.date>L.date?later:keep).push(l)});
-  L.status='moved';L.movedTo=nd;
-  keep.push(L,...layout(s,nd,later.length+1).map(d=>({date:d,status:'planned'})));
-  s.lessons=keep.sort(byDate)}
-const sched=box=>({days:[...box.querySelectorAll('input[data-day]:checked')].map(x=>+x.dataset.day),perWeek:+box.querySelector('[name=pw]').value});
-const chips=d=>`<div class="chips">${[1,2,3,4,5,6,0].map(k=>`<label class="chip"><input type="checkbox" data-day="${k}" ${(d||[]).includes(k)?'checked':''}>${DN[k]}</label>`).join('')}</div>`;
-const warnTxt=s=>{const p=(s.lessons||[]).filter(l=>l.status==='planned').map(l=>l.date).sort().pop(),e=iso(endDate(s));
-  return p&&p>e?`<p class="warn">Последнее занятие (${fmt(parse(p))}) позже окончания абонемента (${fmt(parse(e))}). Измените дни занятий или дату начала.</p>`:''};
-const lr=(l,i)=>`<li><div class="lt"><span>${esc(fmtShort(parse(l.date)))}${l.note?' · '+esc(l.note):''}${l.status==='planned'&&l.date<TODAY?' <span class="warn">· отметьте статус</span>':''}</span><span class="row">${l.status==='moved'?`<span class="tag off">Перенесено на ${esc(fmtShort(parse(l.movedTo)))}</span>`:`<select data-a="st" data-i="${i}">${opts(l.status)}</select>`}<button class="ghost" data-a="dell" data-i="${i}" aria-label="Удалить занятие" style="padding:6px 10px;line-height:1">×</button></span></div>
-${l.status==='planned'?`<details class="mv"><summary>Перенести</summary><div class="row"><input type="date" name="md${i}"><label class="chk"><input type="checkbox" name="ms${i}" checked> сдвинуть остальные</label><button data-a="mv" data-i="${i}">Перенести</button></div></details>`:''}</li>`;
-const opts=cur=>{const ks=['planned','attended','burned'];if(STATUS[cur]&&!ks.includes(cur))ks.push(cur);
-  return ks.map(k=>`<option value="${k}" ${k===cur?'selected':''}>${STATUS[k].t}</option>`).join('')};
 
-const stu=(c,s)=>`<details ${OPEN===c?'open':''} data-c="${c}"><summary>${esc(s.name)} · код ${esc(c)}</summary>
-<div class="inner">
-<div class="fm">
-<label>Имя<input name="name" value="${esc(s.name)}"></label>
-<label>Код (4 цифры)<input name="code" value="${esc(c)}" inputmode="numeric" maxlength="4"></label>
-<label>Занятий в абонементе<select name="n">${[8,12].map(n=>`<option ${n===+s.plan.lessons?'selected':''}>${n}</option>`).join('')}</select></label>
-<label>Стоимость<input name="price" value="${esc(s.plan.price)}"></label>
-<label>Дата оплаты<input type="date" name="paid" value="${esc(s.paidDate)}"></label></div>
-<div class="row"><button data-a="save">Сохранить</button><button class="ghost" data-a="link">Скопировать ссылку</button><button class="red" data-a="del">Удалить ученика</button></div>
-<h2>Расписание</h2>
-${chips(s.days)}
-<div class="fm"><label>Занятий в неделю<select name="pw">${[2,3].map(n=>`<option ${n===+(s.perWeek||2)?'selected':''}>${n}</option>`).join('')}</select></label>
-<label>Дата первого занятия<input type="date" name="first" value="${((s.lessons||[]).find(l=>l.status==='planned')||{}).date||TODAY}"></label></div>
-<div class="row"><button data-a="gen">Расставить занятия по датам</button></div>
-${warnTxt(s)}
-<h2>Занятия</h2>
-<ul class="list">${(s.lessons||[]).map(lr).join('')}</ul>
-<div class="fm"><label>Дата<input type="date" name="ld" value="${TODAY}"></label><label>Статус<select name="ls">${opts('attended')}</select></label><label>Заметка<input name="ln" placeholder="необязательно"></label></div>
-<div class="row"><button data-a="addl">Добавить занятие</button></div>
-<h2>История абонементов</h2>
-${(s.history||[]).length?`<ul class="list">${s.history.slice().reverse().map(h=>`<li><span>${h.lessons} зан. · ${h.from?fmt(parse(h.from)):''}${h.to?' — '+fmt(parse(h.to)):''}</span><span class="tag off">посещ. ${h.attended||0} · перенос ${h.moved||0} · сгор. ${h.burned||0}</span></li>`).join('')}</ul>`:'<p class="empty">Пока это первый абонемент.</p>'}
-</div>
-</details>`;
+function layout(s, start, n) {
+  const out = [start];
+  const d = parse(start);
+  const hol = holidaySet();
 
-function holidaysEditor(){
-  const hs=normHolidays(D.holidays);
-  return `
-  ${hs.length?`<div>${hs.map((h,i)=>`<div class="holrow"><span>${fmt(parse(h.from))} — ${fmt(parse(h.to))}</span><button class="red" data-a="delhol" data-i="${i}" style="padding:4px 10px">×</button></div>`).join('')}</div>`:'<p class="empty" style="margin-bottom:12px;">Пока нерабочих дней нет.</p>'}
-  <div class="rng">
-    <label>С<input type="date" name="hfrom" value="${TODAY}"></label>
-    <label>По<input type="date" name="hto" value="${TODAY}"></label>
-    <button data-a="addhol">Добавить</button>
-  </div>`;
+  while (out.length < n) {
+    do {
+      d.setDate(d.getDate() + 1);
+    } while (!s.days.includes(d.getDay()) || hol.has(iso(d)));
+
+    out.push(iso(d));
+  }
+
+  return out;
 }
 
-function view(){
-  const S=D.students;
-  
+function move(s, i, nd, shift) {
+  const L = s.lessons[i];
+  const keep = [];
+  const later = [];
+
+  s.lessons.forEach((l, j) => {
+    if (j !== i) {
+      (
+        shift && l.status === 'planned' && l.date > L.date
+          ? later
+          : keep
+      ).push(l);
+    }
+  });
+
+  L.status = 'moved';
+  L.movedTo = nd;
+
+  keep.push(
+    L,
+    ...layout(s, nd, later.length + 1).map(d => ({
+      date: d,
+      status: 'planned'
+    }))
+  );
+
+  s.lessons = keep.sort(byDate);
+}
+
+const sched = box => ({
+  days: [...box.querySelectorAll('input[data-day]:checked')]
+    .map(x => +x.dataset.day),
+  perWeek: +box.querySelector('[name=pw]').value
+});
+
+const chips = d => `
+  <div class="chips">
+    ${[1,2,3,4,5,6,0].map(k => `
+      <label class="chip">
+        <input
+          type="checkbox"
+          data-day="${k}"
+          ${(d || []).includes(k) ? 'checked' : ''}
+        >
+        ${DN[k]}
+      </label>
+    `).join('')}
+  </div>
+`;
+
+const warnTxt = s => {
+  const p = (s.lessons || [])
+    .filter(l => l.status === 'planned')
+    .map(l => l.date)
+    .sort()
+    .pop();
+
+  const e = iso(endDate(s));
+
+  return p && p > e
+    ? `
+      <p class="warn">
+        Последнее занятие (${fmt(parse(p))}) позже окончания абонемента
+        (${fmt(parse(e))}). Измените дни занятий или дату начала.
+      </p>
+    `
+    : '';
+};
+
+const opts = cur => {
+  const ks = ['planned', 'attended', 'burned'];
+
+  if (STATUS[cur] && !ks.includes(cur)) ks.push(cur);
+
+  return ks.map(k => `
+    <option value="${k}" ${k === cur ? 'selected' : ''}>
+      ${STATUS[k].t}
+    </option>
+  `).join('');
+};
+
+const lr = (l, i) => `
+  <li>
+    <div class="lt">
+      <span>
+        ${esc(fmtShort(parse(l.date)))}
+        ${l.note ? ' · ' + esc(l.note) : ''}
+        ${l.status === 'planned' && l.date < TODAY
+          ? '<span class="warn">· отметьте статус</span>'
+          : ''}
+      </span>
+
+      <span class="row">
+        ${l.status === 'moved'
+          ? `
+            <span class="tag off">
+              Перенесено на ${esc(fmtShort(parse(l.movedTo)))}
+            </span>
+          `
+          : `
+            <select data-a="st" data-i="${i}">
+              ${opts(l.status)}
+            </select>
+          `}
+
+        <button
+          class="ghost"
+          data-a="dell"
+          data-i="${i}"
+          aria-label="Удалить занятие"
+          style="padding:6px 10px;line-height:1"
+        >×</button>
+      </span>
+    </div>
+
+    ${l.status === 'planned' ? `
+      <details class="mv">
+        <summary>Перенести</summary>
+        <div class="row">
+          <input type="date" name="md${i}">
+          <label class="chk">
+            <input type="checkbox" name="ms${i}" checked>
+            сдвинуть остальные
+          </label>
+          <button data-a="mv" data-i="${i}">Перенести</button>
+        </div>
+      </details>
+    ` : ''}
+  </li>
+`;
+
+const stu = (c, s) => `
+  <details ${OPEN === c ? 'open' : ''} data-c="${esc(c)}">
+    <summary>${esc(s.name)} · код ${esc(c)}</summary>
+
+    <div class="inner">
+      <div class="fm">
+        <label>
+          Имя
+          <input name="name" value="${esc(s.name)}">
+        </label>
+
+        <label>
+          Код (4 цифры)
+          <input
+            name="code"
+            value="${esc(c)}"
+            inputmode="numeric"
+            maxlength="4"
+          >
+        </label>
+
+        <label>
+          Занятий в абонементе
+          <select name="n">
+            ${[8,12].map(n => `
+              <option ${n === +s.plan.lessons ? 'selected' : ''}>
+                ${n}
+              </option>
+            `).join('')}
+          </select>
+        </label>
+
+        <label>
+          Стоимость
+          <input name="price" value="${esc(s.plan.price)}">
+        </label>
+
+        <label>
+          Дата оплаты
+          <input type="date" name="paid" value="${esc(s.paidDate)}">
+        </label>
+      </div>
+
+      <div class="row">
+        <button data-a="save">Сохранить</button>
+        <button class="ghost" data-a="link">Скопировать ссылку</button>
+        <button class="red" data-a="del">Удалить ученика</button>
+      </div>
+
+      <h2>Расписание</h2>
+      ${chips(s.days)}
+
+      <div class="fm">
+        <label>
+          Занятий в неделю
+          <select name="pw">
+            ${[2,3].map(n => `
+              <option ${n === +(s.perWeek || 2) ? 'selected' : ''}>
+                ${n}
+              </option>
+            `).join('')}
+          </select>
+        </label>
+
+        <label>
+          Дата первого занятия
+          <input
+            type="date"
+            name="first"
+            value="${
+              ((s.lessons || []).find(l => l.status === 'planned') || {}).date
+              || TODAY
+            }"
+          >
+        </label>
+      </div>
+
+      <div class="row">
+        <button data-a="gen">Расставить занятия по датам</button>
+      </div>
+
+      ${warnTxt(s)}
+
+      <h2>Занятия</h2>
+      <ul class="list">${(s.lessons || []).map(lr).join('')}</ul>
+
+      <div class="fm">
+        <label>
+          Дата
+          <input type="date" name="ld" value="${TODAY}">
+        </label>
+
+        <label>
+          Статус
+          <select name="ls">${opts('attended')}</select>
+        </label>
+
+        <label>
+          Заметка
+          <input name="ln" placeholder="необязательно">
+        </label>
+      </div>
+
+      <div class="row">
+        <button data-a="addl">Добавить занятие</button>
+      </div>
+
+      <h2>История абонементов</h2>
+
+      ${(s.history || []).length
+        ? `
+          <ul class="list">
+            ${s.history.slice().reverse().map(h => `
+              <li>
+                <span>
+                  ${h.lessons} зан. ·
+                  ${h.from ? fmt(parse(h.from)) : ''}
+                  ${h.to ? ' — ' + fmt(parse(h.to)) : ''}
+                </span>
+                <span class="tag off">
+                  посещ. ${h.attended || 0} ·
+                  перенос ${h.moved || 0} ·
+                  сгор. ${h.burned || 0}
+                </span>
+              </li>
+            `).join('')}
+          </ul>
+        `
+        : '<p class="empty">Пока это первый абонемент.</p>'}
+    </div>
+  </details>
+`;
+
+function holidaysEditor() {
+  const hs = normHolidays(D.holidays);
+
+  return `
+    ${hs.length
+      ? `
+        <div>
+          ${hs.map((h, i) => `
+            <div class="holrow">
+              <span>${fmt(parse(h.from))} — ${fmt(parse(h.to))}</span>
+              <button
+                class="red"
+                data-a="delhol"
+                data-i="${i}"
+                style="padding:4px 10px"
+              >×</button>
+            </div>
+          `).join('')}
+        </div>
+      `
+      : `
+        <p class="empty" style="margin-bottom:12px">
+          Пока нерабочих дней нет.
+        </p>
+      `}
+
+    <div class="rng">
+      <label>
+        С
+        <input type="date" name="hfrom" value="${TODAY}">
+      </label>
+
+      <label>
+        По
+        <input type="date" name="hto" value="${TODAY}">
+      </label>
+
+      <button data-a="addhol">Добавить</button>
+    </div>
+  `;
+}
+
+function view() {
+  const S = D.students;
+
   $('#sidebar-content').innerHTML = `
     <div class="sb-section">Цвет оформления</div>
     <div class="inner">${themeSwitch()}</div>
 
     <div class="sb-section">Глобальные настройки</div>
-    
-    <details><summary>Каникулы и праздники</summary><div class="inner">
-      ${holidaysEditor()}
-    </div></details>
 
-    <details><summary>Код преподавателя</summary><div class="inner">
-      <div class="fm"><label>Новый код<input name="admin" value="${esc(D.admin)}" inputmode="numeric"></label></div>
-      <div class="row"><button data-a="admin">Сменить код</button><button class="ghost" data-a="out">Отвязать GitHub</button></div>
-    </div></details>
+    <details>
+      <summary>Каникулы и праздники</summary>
+      <div class="inner">${holidaysEditor()}</div>
+    </details>
+
+    <details>
+      <summary>Код преподавателя</summary>
+      <div class="inner">
+        <div class="fm">
+          <label>
+            Новый код
+            <input name="admin" value="${esc(D.admin)}" inputmode="numeric">
+          </label>
+        </div>
+
+        <div class="row">
+          <button data-a="admin">Сменить код</button>
+          <button class="ghost" data-a="out">Отвязать GitHub</button>
+        </div>
+      </div>
+    </details>
   `;
 
-  app.innerHTML=`<div class="adm">
-  <header>
-    <div class="header-left">
-      <button class="sidebar-toggle-btn main-header-btn" onclick="toggleSidebar()" aria-label="Открыть меню">☰</button>
-      <div><h1>Кабинет преподавателя</h1><p class="sub">Учеников: ${Object.keys(S).length}</p></div>
+  app.innerHTML = `
+    <div class="adm">
+      <header>
+        <div class="header-left">
+          <button
+            class="sidebar-toggle-btn main-header-btn"
+            onclick="toggleSidebar()"
+            aria-label="Открыть меню"
+          >☰</button>
+
+          <div>
+            <h1>Кабинет преподавателя</h1>
+            <p class="sub">Учеников: ${Object.keys(S).length}</p>
+          </div>
+        </div>
+      </header>
+
+      <div class="layout-desktop">
+        <details>
+          <summary>Новый ученик</summary>
+          <div class="inner">
+            <div class="fm">
+              <label>Имя<input name="name"></label>
+
+              <label>
+                Занятий в абонементе
+                <select name="n"><option>8</option><option>12</option></select>
+              </label>
+
+              <label>
+                Стоимость
+                <input name="price" placeholder="12 000 ₽">
+              </label>
+
+              <label>
+                Дата оплаты
+                <input type="date" name="paid" value="${TODAY}">
+              </label>
+            </div>
+
+            <p class="sub">
+              Дни занятий: если отметить дни и дату первого занятия,
+              остальные даты абонемента расставятся сами.
+            </p>
+
+            ${chips([])}
+
+            <div class="fm">
+              <label>
+                Занятий в неделю
+                <select name="pw"><option>2</option><option>3</option></select>
+              </label>
+
+              <label>
+                Дата первого занятия
+                <input type="date" name="first">
+              </label>
+            </div>
+
+            <div class="row">
+              <button data-a="add">Добавить ученика</button>
+            </div>
+          </div>
+        </details>
+
+        <details data-ab>
+          <summary>Добавить абонемент</summary>
+          <div class="inner">
+            <p class="sub">
+              Текущий абонемент уйдёт в историю,
+              новый начнётся с чистого расписания.
+            </p>
+
+            <div class="fm">
+              <label>
+                Ученик
+                <select name="target">
+                  <option value="">— выберите ученика —</option>
+                  ${Object.entries(S).map(([c, s]) => `
+                    <option value="${esc(c)}">${esc(s.name)}</option>
+                  `).join('')}
+                </select>
+              </label>
+
+              <label>
+                Занятий в абонементе
+                <select name="n"><option>8</option><option>12</option></select>
+              </label>
+
+              <label>
+                Стоимость
+                <input name="price" placeholder="12 000 ₽">
+              </label>
+
+              <label>
+                Дата оплаты
+                <input type="date" name="paid" value="${TODAY}">
+              </label>
+            </div>
+
+            ${chips([])}
+
+            <div class="fm">
+              <label>
+                Занятий в неделю
+                <select name="pw"><option>2</option><option>3</option></select>
+              </label>
+
+              <label>
+                Дата первого занятия
+                <input type="date" name="first">
+              </label>
+            </div>
+
+            <div class="row">
+              <button data-a="newab">Добавить абонемент</button>
+            </div>
+          </div>
+        </details>
+
+        ${Object.entries(S).map(([c, s]) => stu(c, s)).join('')}
+
+        <section class="card">
+          <details>
+            <summary>Правила отмен и переносов</summary>
+            <div class="inner">
+              <textarea
+                name="rules"
+                placeholder="Одно правило на строку..."
+              >${esc((D.rules || []).join('\n'))}</textarea>
+
+              <div class="row">
+                <button data-a="rules">Сохранить правила</button>
+              </div>
+            </div>
+          </details>
+        </section>
+      </div>
     </div>
-  </header>
-  
-  <div class="layout-desktop">
-    <details><summary>Новый ученик</summary>
-      <div class="inner">
-        <div class="fm"><label>Имя<input name="name"></label>
-        <label>Занятий в абонементе<select name="n"><option>8</option><option>12</option></select></label>
-        <label>Стоимость<input name="price" placeholder="12 000 ₽"></label>
-        <label>Дата оплаты<input type="date" name="paid" value="${TODAY}"></label></div>
-        <p class="sub">Дни занятий: если отметить дни и дату первого занятия, остальные даты абонемента расставятся сами.</p>
-        ${chips([])}
-        <div class="fm"><label>Занятий в неделю<select name="pw"><option>2</option><option>3</option></select></label>
-        <label>Дата первого занятия<input type="date" name="first"></label></div>
-        <div class="row"><button data-a="add">Добавить ученика</button></div>
-      </div>
-    </details>
+  `;
 
-    <details data-ab><summary>Добавить абонемент</summary>
-      <div class="inner">
-        <p class="sub">Текущий абонемент уйдёт в историю, новый начнётся с чистого расписания.</p>
-        <div class="fm"><label>Ученик<select name="target"><option value="">— выберите ученика —</option>${Object.entries(S).map(([c,s])=>`<option value="${esc(c)}">${esc(s.name)}</option>`).join('')}</select></label>
-        <label>Занятий в абонементе<select name="n"><option>8</option><option>12</option></select></label>
-        <label>Стоимость<input name="price" placeholder="12 000 ₽"></label>
-        <label>Дата оплаты<input type="date" name="paid" value="${TODAY}"></label></div>
-        ${chips([])}
-        <div class="fm"><label>Занятий в неделю<select name="pw"><option>2</option><option>3</option></select></label>
-        <label>Дата первого занятия<input type="date" name="first"></label></div>
-        <div class="row"><button data-a="newab">Добавить абонемент</button></div>
-      </div>
-    </details>
-
-    ${Object.entries(S).map(([c,s])=>stu(c,s)).join('')}
-
-    <section class="card"><details><summary>Правила отмен и переносов</summary>
-      <div class="inner">
-        <textarea name="rules" placeholder="Одно правило на строку...">${esc((D.rules||[]).join('\n'))}</textarea>
-        <div class="row"><button data-a="rules">Сохранить правила</button></div>
-      </div>
-    </details></section>
-
-  </div>
-  </div>`;
   bindThemes();
 }
 
-function onAct(e){
-  const el=e.target.closest('[data-a]');if(!el)return;
-  const pick=el.tagName==='SELECT'||el.type==='file';
-  if((e.type==='click')===pick)return;
-  
-  const a=el.dataset.a;
-  
-  let box=el.closest('#sidebar'); 
-  if(!box) {
-    box=el.closest('.inner') || el.closest('section') || el.closest('details[data-c]');
+function onAct(e) {
+  const el = e.target.closest('[data-a]');
+  if (!el) return;
+
+  const pick = el.tagName === 'SELECT' || el.type === 'file';
+  if ((e.type === 'click') === pick) return;
+
+  const a = el.dataset.a;
+  let box = el.closest('#sidebar');
+
+  if (!box) {
+    box = el.closest('.inner')
+      || el.closest('section')
+      || el.closest('details[data-c]');
+
     if (box && !box.dataset.c) {
       const parentDetails = box.closest('details[data-c]');
       if (parentDetails) box = parentDetails;
     }
   }
-  
+
+  if (!box) return;
+
   const c = box.dataset?.c;
   const s = c ? D.students[c] : null;
   const i = +el.dataset.i;
-  
+
   const v = n => {
     const target = box.querySelector(`[name="${n}"]`);
     return target ? target.value.trim() : '';
   };
-  
+
   OPEN = c || null;
-  
-  switch(a){
-    case 'add':{
-      if(!v('name'))return toast('Введите имя',1);
-      const sc=sched(box),first=v('first'),auto=sc.days.length>0&&first;
-      if(auto&&sc.days.length!==sc.perWeek)return toast('Отметьте ровно '+sc.perWeek+' дня недели или снимите все отметки',1);
-      act(()=>{const k=newCode(),ns={name:v('name'),plan:{lessons:+v('n'),price:v('price')},paidDate:v('paid'),...sc,lessons:[],history:[]};
-        if(auto)ns.lessons=layout(ns,first,+v('n')).map(d=>({date:d,status:'planned'}));
-        D.students[k]=ns;OPEN=k},'Новый ученик');break}
-    case 'save':{
-      if(!s) return;
-      const nc=v('code');
-      if(nc!==c&&(!/^\d{4}$/.test(nc)||D.students[nc]||nc===D.admin))return toast('Код: 4 цифры, не совпадающие с кодом другого ученика',1);
-      act(()=>{Object.assign(s,sched(box),{name:v('name'),paidDate:v('paid'),plan:{lessons:+v('n'),price:v('price')}});
-        if(nc!==c){D.students[nc]=s;delete D.students[c];OPEN=nc}},'Правка: '+v('name'));break}
-    case 'link':{
-      if(!s) return;
-      const u=location.origin+location.pathname+'?s='+c;
-      navigator.clipboard.writeText(u).then(()=>toast('Ссылка скопирована'),()=>toast(u));break}
-    case 'del':
-      if(!s) return;
-      if(!confirm('Удалить ученика «'+s.name+'» вместе с историей?'))return;
-      act(()=>{delete D.students[c];OPEN=null},'Удаление ученика');break;
-    case 'addl':
-      if(!s) return;
-      if(!v('ld'))return toast('Выберите дату',1);
-      act(()=>{(s.lessons=s.lessons||[]).push({date:v('ld'),status:v('ls'),...(v('ln')?{note:v('ln')}:{})});
-        s.lessons.sort((x,y)=>x.date.localeCompare(y.date))},'Занятие: '+s.name);break;
-    case 'gen':{
-      if(!s) return;
-      const sc=sched(box),first=v('first');
-      if(!first)return toast('Укажите дату первого занятия',1);
-      if(sc.days.length!==sc.perWeek)return toast('Отметьте ровно '+sc.perWeek+' дня недели',1);
-      const used=(s.lessons||[]).filter(l=>l.status==='attended'||l.status==='burned').length,k=+s.plan.lessons-used;
-      if(k<=0)return toast('Все занятия абонемента уже использованы',1);
-      if((s.lessons||[]).some(l=>l.status==='planned')&&!confirm('Заменить уже расставленные запланированные занятия?'))return;
-      act(()=>{Object.assign(s,sc);
-        s.lessons=(s.lessons||[]).filter(l=>l.status!=='planned').concat(layout(s,first,k).map(d=>({date:d,status:'planned'}))).sort(byDate)},'Расписание: '+s.name);break}
-    case 'mv':{
-      if(!s) return;
-      const nd=v('md'+i),sh=box.querySelector('[name=ms'+i+']').checked,L=s.lessons[i];
-      if(!nd)return toast('Выберите новую дату',1);
-      if(sh&&nd<=L.date)return toast('Чтобы сдвинуть остальные занятия, новая дата должна быть позже',1);
-      if(sh&&!(s.days||[]).length)return toast('Сначала отметьте дни занятий и нажмите «Сохранить»',1);
-      act(()=>move(s,i,nd,sh),'Перенос занятия: '+s.name);break}
-    case 'st':
-      if(!s) return;
-      act(()=>{s.lessons[i].status=el.value},'Статус занятия');break;
-    case 'dell':
-      if(!s) return;
-      act(()=>{s.lessons.splice(i,1)},'Удаление занятия');break;
-    case 'rules':
-      act(()=>{D.rules=box.querySelector('[name=rules]').value.split('\n').map(x=>x.trim()).filter(Boolean)},'Правила');break;
-    case 'addhol':{
-      const f=v('hfrom'),t=v('hto');
-      if(!f||!t)return toast('Укажите обе даты',1);
-      if(t<f)return toast('Дата «по» раньше даты «с»',1);
-      act(()=>{D.holidays=normHolidays([...(D.holidays||[]),{from:f,to:t}])},'Каникулы');break}
-    case 'delhol':
-      act(()=>{const hs=normHolidays(D.holidays);hs.splice(i,1);D.holidays=hs},'Удаление каникул');break;
-    case 'newab':{
-      const t=box.querySelector('[name=target]').value;
-      if(!t||!D.students[t])return toast('Выберите ученика',1);
-      const ns=D.students[t],sc=sched(box),first=v('first');
-      if(!first)return toast('Укажите дату первого занятия',1);
-      if(sc.days.length!==sc.perWeek)return toast('Отметьте ровно '+sc.perWeek+' дня недели',1);
-      const old={...ns};
-      const cnt=k=>(old.lessons||[]).filter(l=>l.status===k).length;
-      act(()=>{
-        const closed={lessons:+old.plan.lessons,attended:cnt('attended'),burned:cnt('burned'),moved:cnt('moved'),
-          from:old.paidDate,to:iso(endDate(old)),price:old.plan.price};
-        ns.history=(ns.history||[]).concat(closed);
-        ns.plan={lessons:+v('n'),price:v('price')};
-        ns.paidDate=v('paid');
-        Object.assign(ns,sc);
-        ns.lessons=layout(ns,first,+v('n')).map(d=>({date:d,status:'planned'}));
-        OPEN=t;
-      },'Новый абонемент: '+ns.name);break}
-    case 'admin':{
-      const nv=v('admin');
-      if(!nv||D.students[nv])return toast('Введите другой код',1);
-      act(()=>{D.admin=nv},'Код преподавателя');break}
-    case 'out':
-      try{localStorage.removeItem('gh_token')}catch(x){}
-      TK='';admin(CFG);break;
+
+  switch (a) {
+    case 'add': {
+      if (!v('name')) return toast('Введите имя', 1);
+
+      const sc = sched(box);
+      const first = v('first');
+      const auto = sc.days.length > 0 && first;
+
+      if (auto && sc.days.length !== sc.perWeek) {
+        return toast(
+          'Отметьте ровно ' + sc.perWeek
+          + ' дня недели или снимите все отметки',
+          1
+        );
+      }
+
+      act(() => {
+        const k = newCode();
+
+        const ns = {
+          name: v('name'),
+          plan: { lessons: +v('n'), price: v('price') },
+          paidDate: v('paid'),
+          ...sc,
+          lessons: [],
+          history: []
+        };
+
+        if (auto) {
+          ns.lessons = layout(ns, first, +v('n')).map(d => ({
+            date: d,
+            status: 'planned'
+          }));
+        }
+
+        D.students[k] = ns;
+        OPEN = k;
+      }, 'Новый ученик');
+      break;
+    }
+
+    case 'save': {
+      if (!s) return;
+
+      const nc = v('code');
+
+      if (
+        nc !== c &&
+        (!/^\d{4}$/.test(nc) || D.students[nc] || nc === String(D.admin))
+      ) {
+        return toast(
+          'Код: 4 цифры, не совпадающие с кодом другого ученика',
+          1
+        );
+      }
+
+      act(() => {
+        Object.assign(s, sched(box), {
+          name: v('name'),
+          paidDate: v('paid'),
+          plan: { lessons: +v('n'), price: v('price') }
+        });
+
+        if (nc !== c) {
+          D.students[nc] = s;
+          delete D.students[c];
+          OPEN = nc;
+        }
+      }, 'Правка: ' + v('name'));
+      break;
+    }
+
+    case 'link': {
+      if (!s) return;
+
+      const u = location.origin + location.pathname + '?s=' + c;
+
+      navigator.clipboard.writeText(u).then(
+        () => toast('Ссылка скопирована'),
+        () => toast(u)
+      );
+      break;
+    }
+
+    case 'del': {
+      if (!s) return;
+
+      if (!confirm('Удалить ученика «' + s.name + '» вместе с историей?')) {
+        return;
+      }
+
+      act(() => {
+        delete D.students[c];
+        OPEN = null;
+      }, 'Удаление ученика');
+      break;
+    }
+
+    case 'addl': {
+      if (!s) return;
+      if (!v('ld')) return toast('Выберите дату', 1);
+
+      act(() => {
+        (s.lessons = s.lessons || []).push({
+          date: v('ld'),
+          status: v('ls'),
+          ...(v('ln') ? { note: v('ln') } : {})
+        });
+
+        s.lessons.sort(byDate);
+      }, 'Занятие: ' + s.name);
+      break;
+    }
+
+    case 'gen': {
+      if (!s) return;
+
+      const sc = sched(box);
+      const first = v('first');
+
+      if (!first) return toast('Укажите дату первого занятия', 1);
+
+      if (sc.days.length !== sc.perWeek) {
+        return toast('Отметьте ровно ' + sc.perWeek + ' дня недели', 1);
+      }
+
+      const used = (s.lessons || []).filter(
+        l => l.status === 'attended' || l.status === 'burned'
+      ).length;
+
+      const k = +s.plan.lessons - used;
+
+      if (k <= 0) {
+        return toast('Все занятия абонемента уже использованы', 1);
+      }
+
+      if (
+        (s.lessons || []).some(l => l.status === 'planned') &&
+        !confirm('Заменить уже расставленные запланированные занятия?')
+      ) return;
+
+      act(() => {
+        Object.assign(s, sc);
+
+        s.lessons = (s.lessons || [])
+          .filter(l => l.status !== 'planned')
+          .concat(
+            layout(s, first, k).map(d => ({
+              date: d,
+              status: 'planned'
+            }))
+          )
+          .sort(byDate);
+      }, 'Расписание: ' + s.name);
+      break;
+    }
+
+    case 'mv': {
+      if (!s) return;
+
+      const nd = v('md' + i);
+      const sh = box.querySelector('[name=ms' + i + ']').checked;
+      const L = s.lessons[i];
+
+      if (!nd) return toast('Выберите новую дату', 1);
+
+      if (sh && nd <= L.date) {
+        return toast(
+          'Чтобы сдвинуть остальные занятия, новая дата должна быть позже',
+          1
+        );
+      }
+
+      if (sh && !(s.days || []).length) {
+        return toast(
+          'Сначала отметьте дни занятий и нажмите «Сохранить»',
+          1
+        );
+      }
+
+      act(() => move(s, i, nd, sh), 'Перенос занятия: ' + s.name);
+      break;
+    }
+
+    case 'st': {
+      if (!s) return;
+
+      act(() => {
+        s.lessons[i].status = el.value;
+      }, 'Статус занятия');
+      break;
+    }
+
+    case 'dell': {
+      if (!s) return;
+
+      act(() => {
+        s.lessons.splice(i, 1);
+      }, 'Удаление занятия');
+      break;
+    }
+
+    case 'rules': {
+      act(() => {
+        D.rules = box.querySelector('[name=rules]').value
+          .split('\n')
+          .map(x => x.trim())
+          .filter(Boolean);
+      }, 'Правила');
+      break;
+    }
+
+    case 'addhol': {
+      const f = v('hfrom');
+      const t = v('hto');
+
+      if (!f || !t) return toast('Укажите обе даты', 1);
+      if (t < f) return toast('Дата «по» раньше даты «с»', 1);
+
+      act(() => {
+        D.holidays = normHolidays([
+          ...(D.holidays || []),
+          { from: f, to: t }
+        ]);
+      }, 'Каникулы');
+      break;
+    }
+
+    case 'delhol': {
+      act(() => {
+        const hs = normHolidays(D.holidays);
+        hs.splice(i, 1);
+        D.holidays = hs;
+      }, 'Удаление каникул');
+      break;
+    }
+
+    case 'newab': {
+      const t = box.querySelector('[name=target]').value;
+
+      if (!t || !D.students[t]) {
+        return toast('Выберите ученика', 1);
+      }
+
+      const ns = D.students[t];
+      const sc = sched(box);
+      const first = v('first');
+
+      if (!first) return toast('Укажите дату первого занятия', 1);
+
+      if (sc.days.length !== sc.perWeek) {
+        return toast('Отметьте ровно ' + sc.perWeek + ' дня недели', 1);
+      }
+
+      const old = { ...ns };
+      const cnt = k => (old.lessons || []).filter(
+        l => l.status === k
+      ).length;
+
+      act(() => {
+        const closed = {
+          lessons: +old.plan.lessons,
+          attended: cnt('attended'),
+          burned: cnt('burned'),
+          moved: cnt('moved'),
+          from: old.paidDate,
+          to: iso(endDate(old)),
+          price: old.plan.price
+        };
+
+        ns.history = (ns.history || []).concat(closed);
+        ns.plan = { lessons: +v('n'), price: v('price') };
+        ns.paidDate = v('paid');
+
+        Object.assign(ns, sc);
+
+        ns.lessons = layout(ns, first, +v('n')).map(d => ({
+          date: d,
+          status: 'planned'
+        }));
+
+        OPEN = t;
+      }, 'Новый абонемент: ' + ns.name);
+      break;
+    }
+
+    case 'admin': {
+      const nv = v('admin');
+
+      if (!nv || D.students[nv]) {
+        return toast('Введите другой код', 1);
+      }
+
+      act(() => {
+        D.admin = nv;
+      }, 'Код преподавателя');
+      break;
+    }
+
+    case 'out': {
+      try {
+        localStorage.removeItem('gh_token');
+      } catch (x) {}
+
+      TK = '';
+      admin(CFG);
+      break;
+    }
   }
 }
 
-function tokenScreen(){
-  app.innerHTML=`<header>
-    <div class="header-left"><button class="sidebar-toggle-btn main-header-btn" onclick="toggleSidebar()">☰</button><div></div></div>
-  </header>
-  <form class="card login" id="tf"><h1>Подключение к GitHub</h1>
-  <p class="sub">Один раз на этом устройстве вставьте токен доступа к репозиторию. Он хранится только в этом браузере.</p>
-  <input id="tk" type="password" autocomplete="off" placeholder="github_pat_…"><div class="err"></div><button>Подключить</button></form>`;
-  
+function tokenScreen() {
+  app.innerHTML = `
+    <header>
+      <div class="header-left">
+        <button
+          class="sidebar-toggle-btn main-header-btn"
+          onclick="toggleSidebar()"
+          aria-label="Открыть меню"
+        >☰</button>
+      </div>
+    </header>
+
+    <form class="card login" id="tf">
+      <h1>Подключение к GitHub</h1>
+
+      <p class="sub">
+        Один раз на этом устройстве вставьте токен доступа
+        к репозиторию. Он хранится только в этом браузере.
+      </p>
+
+      <input
+        id="tk"
+        type="password"
+        autocomplete="off"
+        placeholder="github_pat_…"
+      >
+
+      <div class="err"></div>
+      <button>Подключить</button>
+    </form>
+  `;
+
   $('#sidebar-content').innerHTML = `
     <div class="sb-section">Цвет оформления</div>
     <div class="inner">${themeSwitch()}</div>
   `;
+
   bindThemes();
-  $('#tf').onsubmit=e=>{e.preventDefault();const t=$('#tk').value.trim();if(!t)return;TK=t;try{localStorage.setItem('gh_token',t)}catch(x){}admin(CFG)};
+
+  $('#tf').onsubmit = e => {
+    e.preventDefault();
+
+    const t = $('#tk').value.trim();
+    if (!t) return;
+
+    TK = t;
+
+    try {
+      localStorage.setItem('gh_token', t);
+    } catch (x) {}
+
+    admin(CFG);
+  };
 }
 
-function admin(data){
-  CFG=data;
-  R=data.repo||(location.hostname.split('.')[0]+'/'+(location.pathname.split('/')[1]||''));
-  app.onclick=onAct;app.onchange=onAct;
-  if(!tok())return tokenScreen();
-  app.innerHTML='<p class="sub" style="text-align:center;margin-top:20vh">Загрузка…</p>';
-  load().then(view).catch(err=>{
-    app.innerHTML=`<div class="card login"><h1>Не удалось подключиться</h1><p class="sub">${esc(err.message)}</p><button id="rt">Ввести токен заново</button></div>`;
-    $('#rt').onclick=()=>{try{localStorage.removeItem('gh_token')}catch(x){}TK='';admin(CFG)};
+function admin(data) {
+  CFG = data;
+
+  R = data.repo || (
+    location.hostname.split('.')[0]
+    + '/'
+    + (location.pathname.split('/')[1] || '')
+  );
+
+  app.onclick = onAct;
+  app.onchange = onAct;
+
+  /* Обработчики действий внутри боковой панели */
+  $('#sidebar').onclick = onAct;
+  $('#sidebar').onchange = onAct;
+
+  if (!tok()) return tokenScreen();
+
+  app.innerHTML = `
+    <p class="sub" style="text-align:center;margin-top:20vh">
+      Загрузка…
+    </p>
+  `;
+
+  load().then(view).catch(err => {
+    app.innerHTML = `
+      <div class="card login">
+        <h1>Не удалось подключиться</h1>
+        <p class="sub">${esc(err.message)}</p>
+        <button id="rt">Ввести токен заново</button>
+      </div>
+    `;
+
+    $('#rt').onclick = () => {
+      try {
+        localStorage.removeItem('gh_token');
+      } catch (x) {}
+
+      TK = '';
+      admin(CFG);
+    };
   });
 }
 
-/* старт */
-(async()=>{
-  const code=new URLSearchParams(location.search).get('s');
-  if(!code) return login();
-  try{
-    const r=await fetch('data.json?v='+Date.now());
-    if(!r.ok) throw new Error(r.status);
-    const data=await r.json();
-    if(data.admin&&code===String(data.admin)){document.title='Кабинет преподавателя';return admin(data)}
-    const st=(data.students||{})[code];
-    if(!st) return login('Код не найден. Проверьте, что он введён без ошибок.');
-    document.title=st.name+' — личный кабинет';
-    render(st,data.rules,data.holidays||[]);
-  }catch(e){
-    app.innerHTML='<div class="card login"><h1>Не удалось загрузить данные</h1><p class="sub">Откройте страницу по ссылке с GitHub Pages. При открытии файла прямо с компьютера браузер блокирует загрузку data.json.</p></div>';
+/* Старт */
+
+(async () => {
+  const code = new URLSearchParams(location.search).get('s');
+
+  if (!code) return login();
+
+  try {
+    const r = await fetch('data.json?v=' + Date.now());
+
+    if (!r.ok) throw new Error(r.status);
+
+    const data = await r.json();
+
+    if (data.admin && code === String(data.admin)) {
+      document.title = 'Кабинет преподавателя';
+      return admin(data);
+    }
+
+    const st = (data.students || {})[code];
+
+    if (!st) {
+      return login('Код не найден. Проверьте, что он введён без ошибок.');
+    }
+
+    document.title = st.name + ' — личный кабинет';
+    render(st, data.rules, data.holidays || []);
+  } catch (e) {
+    app.innerHTML = `
+      <div class="card login">
+        <h1>Не удалось загрузить данные</h1>
+        <p class="sub">
+          Проверьте доступность data.json и корректность данных.
+          Открывайте страницу через GitHub Pages,
+          а не как локальный файл на компьютере.
+        </p>
+      </div>
+    `;
   }
 })();
 </script>
