@@ -118,7 +118,6 @@ const STATUS = {
   attended:{t:'Проведено',c:''},
   burned:{t:'Сгорело',c:'burn'},
   moved:{t:'Перенесено',c:'off'},
-  cancelled:{t:'Отменено',c:'off'},
   planned:{t:'Запланировано',c:'plan'}
 };
 
@@ -198,7 +197,6 @@ function render(st, rules, holidays){
         <span>посещено: ${h.attended||0}</span>
         <span>перенесено: ${h.moved||0}</span>
         <span>сгорело: ${h.burned||0}</span>
-        ${h.cancelled?`<span>отменено: ${h.cancelled}</span>`:''}
         ${h.price?`<span>${esc(h.price)}</span>`:''}
       </div>
     </div>`).join('')}</div>` : '<p class="empty">Пока это первый абонемент.</p>';
@@ -319,7 +317,7 @@ const warnTxt=s=>{const p=(s.lessons||[]).filter(l=>l.status==='planned').map(l=
   return p&&p>e?`<p class="warn">Последнее занятие (${fmt(parse(p))}) позже окончания абонемента (${fmt(parse(e))}). Измените дни занятий или дату начала.</p>`:''};
 const lr=(l,i)=>`<li><div class="lt"><span>${esc(fmtShort(parse(l.date)))}${l.note?' · '+esc(l.note):''}${l.status==='planned'&&l.date<TODAY?' <span class="warn">· отметьте статус</span>':''}</span><span class="row">${l.status==='moved'?`<span class="tag off">Перенесено на ${esc(fmtShort(parse(l.movedTo)))}</span>`:`<select data-a="st" data-i="${i}">${opts(l.status)}</select>`}<button class="ghost" data-a="dell" data-i="${i}" aria-label="Удалить занятие">×</button></span></div>
 ${l.status==='planned'?`<details class="mv"><summary>Перенести</summary><div class="row"><input type="date" name="md${i}"><label class="chk"><input type="checkbox" name="ms${i}" checked> сдвинуть остальные</label><button data-a="mv" data-i="${i}">Перенести</button></div></details>`:''}</li>`;
-const opts=cur=>{const ks=['planned','attended','burned','cancelled'];if(STATUS[cur]&&!ks.includes(cur))ks.push(cur);
+const opts=cur=>{const ks=['planned','attended','burned'];if(STATUS[cur]&&!ks.includes(cur))ks.push(cur);
   return ks.map(k=>`<option value="${k}" ${k===cur?'selected':''}>${STATUS[k].t}</option>`).join('')};
 
 const stu=(c,s)=>`<section class="card" data-c="${c}"><details ${OPEN===c?'open':''}><summary>${esc(s.name)} · код ${esc(c)}</summary>
@@ -375,7 +373,7 @@ function view(){
 
   <section class="card" data-ab><details><summary>Добавить абонемент</summary>
     <p class="sub">Текущий абонемент уйдёт в историю, новый начнётся с чистого расписания.</p>
-    <div class="fm"><label>Ученик<select name="target">${Object.entries(S).map(([c,s])=>`<option value="${esc(c)}">${esc(s.name)}</option>`).join('')||'<option value="">— нет учеников —</option>'}</select></label>
+    <div class="fm"><label>Ученик<select name="target"><option value="">— выберите ученика —</option>${Object.entries(S).map(([c,s])=>`<option value="${esc(c)}">${esc(s.name)}</option>`).join('')}</select></label>
     <label>Занятий в абонементе<select name="n"><option>8</option><option>12</option></select></label>
     <label>Стоимость<input name="price" placeholder="12 000 ₽"></label>
     <label>Дата оплаты<input type="date" name="paid" value="${TODAY}"></label></div>
@@ -460,7 +458,7 @@ function onAct(e){
       const old={...ns};
       const cnt=k=>(old.lessons||[]).filter(l=>l.status===k).length;
       act(()=>{
-        const closed={lessons:+old.plan.lessons,attended:cnt('attended'),burned:cnt('burned'),moved:cnt('moved'),cancelled:cnt('cancelled'),
+        const closed={lessons:+old.plan.lessons,attended:cnt('attended'),burned:cnt('burned'),moved:cnt('moved'),
           from:old.paidDate,to:iso(endDate(old)),price:old.plan.price};
         ns.history=(ns.history||[]).concat(closed);
         ns.plan={lessons:+v('n'),price:v('price')};
