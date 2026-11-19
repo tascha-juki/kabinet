@@ -42,7 +42,6 @@ h2{font-size:1.05rem;margin:0 0 16px;font-weight:500}
 @keyframes snow{from{background-position:0 0, 20px 20px}to{background-position:0 100vh, 20px calc(100vh + 20px)}}
 
 .card{background:var(--card);border-radius:var(--r);padding:20px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,0.02);transition:transform .2s}
-/* Убираем эффект наведения для формы входа, чтобы она не уезжала */
 .card:hover:not(.login){transform:translateY(-1px)}
 
 .plan{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-end}
@@ -92,10 +91,10 @@ details li{margin-bottom:6px}
 
 /* Центрированная форма входа */
 .login{
-  position: fixed !important; /* Принудительно фиксируем */
+  position: fixed !important;
   top: 50% !important; 
   left: 50% !important;
-  transform: translate(-50%, -50%) !important; /* Жестко центрируем */
+  transform: translate(-50%, -50%) !important;
   width: 100%;
   max-width: 380px;
   text-align: center;
@@ -163,7 +162,8 @@ input[type=checkbox]{width:auto;padding:0;accent-color:var(--p)}
   .sidebar{transform:translateX(-100%);box-shadow:none}
   .sidebar.open{transform:translateX(0);box-shadow:2px 0 12px rgba(0,0,0,0.05)}
   main{margin-left:0;max-width:900px}
-  body.sb-open main{margin-left:var(--sidebar-w)}
+  /* Отключаем сдвиг контента, чтобы блок оставался на месте */
+  body.sb-open main{margin-left:0 !important;}
   body.sb-open #overlay{opacity:0;pointer-events:none}
 }
 
@@ -244,7 +244,6 @@ try{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.
 
 /* вход по коду */
 function login(msg){
-  // Шапка с кнопкой меню, форма входа отцентрована независимо от main
   app.innerHTML=`
   <header>
     <div class="header-left"><button class="sidebar-toggle-btn main-header-btn" onclick="toggleSidebar()">☰</button></div>
@@ -330,6 +329,7 @@ function render(st, rules, holidays){
   `;
 
   const isAsya = st.name.trim().toLowerCase() === 'ася';
+  // Кот появится, если есть сгоревшие занятия
   const catImg = (isAsya && burned > 0) ? `<img src="cat.png" onerror="this.src='https://i.imgur.com/uYxY5C1.png'" alt="Котик" class="cat-on-burn">` : '';
 
   app.innerHTML=`
