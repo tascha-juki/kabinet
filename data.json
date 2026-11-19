@@ -175,65 +175,6 @@
       ],
       "receipts": []
     },
-    "6373": {
-      "name": "Валерия",
-      "plan": {
-        "lessons": 8,
-        "price": "16000"
-      },
-      "paidDate": "2026-10-12",
-      "days": [
-        1,
-        4
-      ],
-      "perWeek": 2,
-      "lessons": [
-        {
-          "date": "2026-10-12",
-          "status": "planned"
-        },
-        {
-          "date": "2026-10-15",
-          "status": "planned"
-        },
-        {
-          "date": "2026-10-19",
-          "status": "planned"
-        },
-        {
-          "date": "2026-10-22",
-          "status": "planned"
-        },
-        {
-          "date": "2026-10-26",
-          "status": "planned"
-        },
-        {
-          "date": "2026-10-29",
-          "status": "planned"
-        },
-        {
-          "date": "2026-11-02",
-          "status": "planned"
-        },
-        {
-          "date": "2026-11-05",
-          "status": "planned"
-        }
-      ],
-      "receipts": [],
-      "history": [
-        {
-          "lessons": 8,
-          "attended": 3,
-          "burned": 1,
-          "moved": 0,
-          "from": "2026-11-09",
-          "to": "2026-12-19",
-          "price": "16000"
-        }
-      ]
-    },
     "6570": {
       "name": "Оля",
       "plan": {
