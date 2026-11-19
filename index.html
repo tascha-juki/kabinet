@@ -12,6 +12,8 @@
   --bg:#f4f7fb;--card:#fff;--p:#4a90e2;--ps:#ebf3fc;--tx:#2c3e50;--mu:#7f8c8d;--ln:#e1e8ed;
   --burn:#e74c3c;--burns:#fdf0ed;--r:16px;
   --shadow:0 2px 12px rgba(0,0,0,0.04);
+  --sidebar-bg: #ffffff;
+  --sidebar-w: 280px;
 }
 [data-theme=green]{--bg:#f2f9f5;--p:#27ae60;--ps:#e9f7ef;--tx:#1e2e25;--mu:#6e8a78;--ln:#d5ebd9}
 [data-theme=pink]{--bg:#fdf5f7;--p:#e84393;--ps:#fceef4;--tx:#3a1c29;--mu:#8a6e78;--ln:#f5dce7}
@@ -20,7 +22,7 @@
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;transition:background .3s}
-main{max-width:900px;margin:0 auto;padding:18px 16px 56px;position:relative}
+main{max-width:800px;margin:0 auto;padding:18px 16px 56px;position:relative;transition:margin-left .3s}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:24px}
 h1{font-size:1.4rem;line-height:1.2;margin:0;font-weight:500}
 h2{font-size:1.05rem;margin:0 0 16px;font-weight:500}
@@ -34,13 +36,6 @@ h2{font-size:1.05rem;margin:0 0 16px;font-weight:500}
 /* Снежинки для новогодней темы */
 [data-theme=winter] body::before{content:"";position:fixed;inset:0;background-image:radial-gradient(circle, #fff 2px, transparent 2px), radial-gradient(circle, #fff 1px, transparent 1px);background-size:60px 60px, 40px 40px;background-position:0 0, 20px 20px;opacity:0.6;z-index:-1;pointer-events:none;animation:snow 20s linear infinite}
 @keyframes snow{from{background-position:0 0, 20px 20px}to{background-position:0 100vh, 20px calc(100vh + 20px)}}
-
-/* Сетка с сайдбаром */
-.layout{display:grid;grid-template-columns:1fr;gap:20px;align-items:start}
-@media(min-width:850px){
-  .layout{grid-template-columns:1fr 300px}
-  .sidebar{position:sticky;top:18px}
-}
 
 .card{background:var(--card);border-radius:var(--r);padding:20px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,0.02);transition:transform .2s}
 .card:hover{transform:translateY(-1px)}
@@ -125,20 +120,60 @@ input[type=checkbox]{width:auto;padding:0;accent-color:var(--p)}
 .holrow:last-child{border:0}
 .warn{color:var(--burn);font-size:.9rem}
 
-/* Боковая панель */
-.sidebar-toggle{display:none;margin-bottom:10px;background:var(--card);color:var(--tx);border:1px solid var(--ln);width:100%;text-align:left;padding:14px;border-radius:12px}
+/* Notion-style Sidebar */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--sidebar-bg);border-right:1px solid var(--ln);z-index:100;transform:translateX(-100%);transition:transform .3s cubic-bezier(0.4, 0, 0.2, 1);box-shadow:2px 0 12px rgba(0,0,0,0.05);display:flex;flex-direction:column}
+.sidebar.open{transform:translateX(0)}
+.sidebar .sb-header{padding:16px 20px;display:flex;align-items:center;gap:8px;font-weight:600;font-size:1.1rem;border-bottom:1px solid var(--ln)}
+.sidebar .sb-content{padding:16px 12px;overflow-y:auto;flex-grow:1}
+.sb-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;cursor:pointer;color:var(--tx);font-size:.95rem;transition:background .15s;text-decoration:none;font-weight:500}
+.sb-item:hover{background:var(--ps)}
+.sb-item.active{background:var(--ps);color:var(--p)}
+.sb-section{font-size:.75rem;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin:20px 12px 8px;display:flex;justify-content:space-between;align-items:center}
+.sb-section span{cursor:pointer;padding:2px 6px;border-radius:4px}
+.sb-section span:hover{background:var(--ps);color:var(--tx)}
+.sidebar .inner{padding:0 12px 20px 12px}
+.sidebar details{background:transparent;box-shadow:none;border:0;margin-bottom:0}
+.sidebar details summary{padding:8px 12px;border-radius:6px;font-weight:500;font-size:.95rem}
+.sidebar details summary::after{display:none}
+.sidebar details summary:hover{background:var(--ps)}
+.sidebar-toggle-btn{background:transparent;border:none;color:var(--mu);cursor:pointer;padding:8px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background .2s;font-size:1.2rem}
+.sidebar-toggle-btn:hover{background:var(--ps);color:var(--tx)}
+.main-header-btn{margin-right:12px}
+.header-left{display:flex;align-items:center}
+
+/* Overlay */
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,0.2);z-index:90;opacity:0;pointer-events:none;transition:opacity .3s}
+#overlay.on{opacity:1;pointer-events:auto}
+
+/* Десктопное поведение */
 @media(min-width:850px){
-  .sidebar-toggle{display:block}
-  .sidebar .details-wrap{display:block}
-  .sidebar .details-wrap.hidden{display:none}
+  .sidebar{transform:translateX(-100%);box-shadow:none}
+  .sidebar.open{transform:translateX(0);box-shadow:2px 0 12px rgba(0,0,0,0.05)}
+  main{margin-left:0;max-width:900px}
+  .layout-desktop{display:grid;grid-template-columns:1fr;transition:padding-left .3s}
+  body.sb-open main{margin-left:var(--sidebar-w)}
+  body.sb-open #overlay{opacity:0;pointer-events:none}
 }
 
-#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--tx);color:#fff;padding:12px 20px;border-radius:12px;z-index:10;display:none;max-width:90vw;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.1);font-size:.9rem}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--tx);color:#fff;padding:12px 20px;border-radius:12px;z-index:1000;display:none;max-width:90vw;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.1);font-size:.9rem}
 #toast.bad{background:var(--burn)}
 button:focus-visible,summary:focus-visible,input:focus-visible,figure:focus-visible{outline:2px solid var(--p);outline-offset:2px}
 </style>
 </head>
 <body>
+<div id="overlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sb-header">
+    <div class="header-left">
+      <button class="sidebar-toggle-btn" onclick="toggleSidebar()" aria-label="Закрыть меню">«</button>
+    </div>
+    <span>Life Space ⚙️</span>
+  </div>
+  <div class="sb-content" id="sidebar-content">
+    <!-- Заполняется через JS -->
+  </div>
+</aside>
+
 <main id="app"></main>
 <div id="toast" role="status"></div>
 
@@ -158,6 +193,21 @@ function parse(d){const [y,m,x]=d.split('-').map(Number);return new Date(y,m-1,x
 function fmt(d){return d.toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'})}
 function fmtShort(d){return d.toLocaleDateString('ru-RU',{day:'numeric',month:'short',weekday:'short'})}
 function plural(n,a,b,c){const m=n%100,k=n%10;return m>10&&m<15?c:k===1?a:k>1&&k<5?b:c}
+
+/* Боковая панель */
+function toggleSidebar(){
+  const sb=$('#sidebar'), ov=$('#overlay'), isOpen=sb.classList.contains('open');
+  if(isOpen){
+    sb.classList.remove('open');
+    ov.classList.remove('on');
+    document.body.classList.remove('sb-open');
+  }else{
+    sb.classList.add('open');
+    if(window.innerWidth<850) ov.classList.add('on');
+    document.body.classList.add('sb-open');
+  }
+}
+$('#overlay').onclick = toggleSidebar;
 
 /* темы */
 function setTheme(t){
@@ -182,7 +232,10 @@ try{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.
 
 /* вход по коду */
 function login(msg){
-  app.innerHTML=`<header><div></div>${themeSwitch()}</header>
+  app.innerHTML=`<header>
+    <div class="header-left"><button class="sidebar-toggle-btn main-header-btn" onclick="toggleSidebar()">☰</button><div></div></div>
+    ${themeSwitch()}
+  </header>
   <form class="card login" id="f">
     <h1>Личный кабинет</h1>
     <p class="sub">Введите код, который прислал преподаватель</p>
@@ -193,7 +246,7 @@ function login(msg){
   $('#f').onsubmit=e=>{e.preventDefault();const c=$('#code').value.trim();if(c)location.search='?s='+encodeURIComponent(c)};
 }
 
-/* кабинет */
+/* кабинет ученика */
 function render(st, rules, holidays){
   const total = st.plan.lessons;
   const L = (st.lessons||[]).slice().sort((a,b)=>a.date.localeCompare(b.date));
@@ -244,9 +297,24 @@ function render(st, rules, holidays){
   const holHTML = hs.length ? `<ul class="list">${hs.map(h=>`<li><span>${fmtShort(h.from)}${h.from.getTime()!==h.to.getTime()?' — '+fmtShort(h.to):''}</span><span class="tag off">нерабочие</span></li>`).join('')}</ul>`
     : '<p class="empty">На этот абонемент нерабочих дней нет.</p>';
 
+  // Заполняем сайдбар для ученика
+  $('#sidebar-content').innerHTML = `
+    <div class="sb-section">Правила</div>
+    <div class="inner" style="color:var(--tx);font-size:.9rem;line-height:1.5;">
+      ${(rules||[]).map(r=>`<div style="margin-bottom:8px;">• ${esc(r)}</div>`).join('')}
+    </div>
+    <div class="sb-section">Нерабочие дни</div>
+    <div class="inner">
+      ${holHTML}
+    </div>
+  `;
+
   app.innerHTML=`
   <header>
-    <div><h1>${esc(st.name)}</h1><p class="sub">Личный кабинет ученика</p></div>
+    <div class="header-left">
+      <button class="sidebar-toggle-btn main-header-btn" onclick="toggleSidebar()" aria-label="Открыть меню">☰</button>
+      <div><h1>${esc(st.name)}</h1><p class="sub">Личный кабинет ученика</p></div>
+    </div>
     ${themeSwitch()}
   </header>
 
@@ -273,18 +341,13 @@ function render(st, rules, holidays){
   </section>
 
   <section class="card"><h2>История</h2>${lessons}</section>
-
   <section class="card"><h2>История абонементов</h2>${histHTML}</section>
-
-  <section class="card"><h2>Нерабочие дни</h2>${holHTML}</section>
-
-  <section class="card"><details><summary>Правила отмен и переносов</summary>
-    <div class="inner"><ul>${(rules||[]).map(r=>`<li>${esc(r)}</li>`).join('')}</ul></div></details></section>`;
+  `;
 
   bindThemes();
 }
 
-/* ===== режим преподавателя: правки сохраняются в data.json через GitHub API ===== */
+/* ===== режим преподавателя ===== */
 let D,SHA,R,CFG,OPEN=null,TK='',tt;
 const tok=()=>{try{return localStorage.getItem('gh_token')||TK}catch(e){return TK}};
 const TODAY=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
@@ -377,7 +440,7 @@ ${(s.history||[]).length?`<ul class="list">${s.history.slice().reverse().map(h=>
 
 function holidaysEditor(){
   const hs=normHolidays(D.holidays);
-  return `<p class="sub">Диапазон дат, который пропускает автоматическая расстановка (отпуск, праздники).</p>
+  return `<p class="sub">Диапазон дат, который пропускает автоматическая расстановка.</p>
   ${hs.length?`<div>${hs.map((h,i)=>`<div class="holrow"><span>${fmt(parse(h.from))} — ${fmt(parse(h.to))}</span><button class="red" data-a="delhol" data-i="${i}" style="padding:4px 10px">×</button></div>`).join('')}</div>`:'<p class="empty">Пока нерабочих дней нет.</p>'}
   <div class="rng">
     <label>С<input type="date" name="hfrom" value="${TODAY}"></label>
@@ -388,71 +451,69 @@ function holidaysEditor(){
 
 function view(){
   const S=D.students;
-  app.innerHTML=`<div class="adm">
-  <header><div><h1>Кабинет преподавателя</h1><p class="sub">Учеников: ${Object.keys(S).length}</p></div>${themeSwitch()}</header>
   
-  <div class="layout">
-    <div class="main-col">
-      <details><summary>Новый ученик</summary>
-        <div class="inner">
-          <div class="fm"><label>Имя<input name="name"></label>
-          <label>Занятий в абонементе<select name="n"><option>8</option><option>12</option></select></label>
-          <label>Стоимость<input name="price" placeholder="12 000 ₽"></label>
-          <label>Дата оплаты<input type="date" name="paid" value="${TODAY}"></label></div>
-          <p class="sub">Дни занятий: если отметить дни и дату первого занятия, остальные даты абонемента расставятся сами.</p>
-          ${chips([])}
-          <div class="fm"><label>Занятий в неделю<select name="pw"><option>2</option><option>3</option></select></label>
-          <label>Дата первого занятия<input type="date" name="first"></label></div>
-          <div class="row"><button data-a="add">Добавить ученика</button></div>
-        </div>
-      </details>
+  // Заполняем сайдбар для препода
+  $('#sidebar-content').innerHTML = `
+    <div class="sb-section">Глобальные настройки</div>
+    
+    <details><summary>Правила отмен</summary><div class="inner">
+      <p class="sub">Одно правило на строку.</p>
+      <textarea name="rules">${esc((D.rules||[]).join('\n'))}</textarea>
+      <div class="row"><button data-a="rules">Сохранить</button></div>
+    </div></details>
 
-      <details data-ab><summary>Добавить абонемент</summary>
-        <div class="inner">
-          <p class="sub">Текущий абонемент уйдёт в историю, новый начнётся с чистого расписания.</p>
-          <div class="fm"><label>Ученик<select name="target"><option value="">— выберите ученика —</option>${Object.entries(S).map(([c,s])=>`<option value="${esc(c)}">${esc(s.name)}</option>`).join('')}</select></label>
-          <label>Занятий в абонементе<select name="n"><option>8</option><option>12</option></select></label>
-          <label>Стоимость<input name="price" placeholder="12 000 ₽"></label>
-          <label>Дата оплаты<input type="date" name="paid" value="${TODAY}"></label></div>
-          ${chips([])}
-          <div class="fm"><label>Занятий в неделю<select name="pw"><option>2</option><option>3</option></select></label>
-          <label>Дата первого занятия<input type="date" name="first"></label></div>
-          <div class="row"><button data-a="newab">Добавить абонемент</button></div>
-        </div>
-      </details>
+    <details><summary>Каникулы и праздники</summary><div class="inner">
+      ${holidaysEditor()}
+    </div></details>
 
-      ${Object.entries(S).map(([c,s])=>stu(c,s)).join('')}
+    <details><summary>Настройки</summary><div class="inner">
+      <div class="fm"><label>Код преподавателя<input name="admin" value="${esc(D.admin)}" inputmode="numeric"></label></div>
+      <div class="row"><button data-a="admin">Сменить код</button><button class="ghost" data-a="out">Выйти</button></div>
+    </div></details>
+  `;
+
+  app.innerHTML=`<div class="adm">
+  <header>
+    <div class="header-left">
+      <button class="sidebar-toggle-btn main-header-btn" onclick="toggleSidebar()" aria-label="Открыть меню">☰</button>
+      <div><h1>Кабинет преподавателя</h1><p class="sub">Учеников: ${Object.keys(S).length}</p></div>
     </div>
-
-    <aside class="sidebar">
-      <button class="sidebar-toggle" id="sb-toggle">Скрыть настройки ⚙️</button>
-      <div class="details-wrap" id="sb-wrap">
-        <details><summary>Правила отмен</summary><div class="inner">
-          <p class="sub">Одно правило на строку.</p>
-          <textarea name="rules">${esc((D.rules||[]).join('\n'))}</textarea>
-          <div class="row"><button data-a="rules">Сохранить</button></div>
-        </div></details>
-
-        <details><summary>Каникулы</summary><div class="inner">
-          ${holidaysEditor()}
-        </div></details>
-
-        <details><summary>Настройки</summary><div class="inner">
-          <div class="fm"><label>Код преподавателя<input name="admin" value="${esc(D.admin)}" inputmode="numeric"></label></div>
-          <div class="row"><button data-a="admin">Сменить код</button><button class="ghost" data-a="out">Выйти</button></div>
-        </div></details>
+    ${themeSwitch()}
+  </header>
+  
+  <div class="layout-desktop">
+    <details><summary>Новый ученик</summary>
+      <div class="inner">
+        <div class="fm"><label>Имя<input name="name"></label>
+        <label>Занятий в абонементе<select name="n"><option>8</option><option>12</option></select></label>
+        <label>Стоимость<input name="price" placeholder="12 000 ₽"></label>
+        <label>Дата оплаты<input type="date" name="paid" value="${TODAY}"></label></div>
+        <p class="sub">Дни занятий: если отметить дни и дату первого занятия, остальные даты абонемента расставятся сами.</p>
+        ${chips([])}
+        <div class="fm"><label>Занятий в неделю<select name="pw"><option>2</option><option>3</option></select></label>
+        <label>Дата первого занятия<input type="date" name="first"></label></div>
+        <div class="row"><button data-a="add">Добавить ученика</button></div>
       </div>
-    </aside>
+    </details>
+
+    <details data-ab><summary>Добавить абонемент</summary>
+      <div class="inner">
+        <p class="sub">Текущий абонемент уйдёт в историю, новый начнётся с чистого расписания.</p>
+        <div class="fm"><label>Ученик<select name="target"><option value="">— выберите ученика —</option>${Object.entries(S).map(([c,s])=>`<option value="${esc(c)}">${esc(s.name)}</option>`).join('')}</select></label>
+        <label>Занятий в абонементе<select name="n"><option>8</option><option>12</option></select></label>
+        <label>Стоимость<input name="price" placeholder="12 000 ₽"></label>
+        <label>Дата оплаты<input type="date" name="paid" value="${TODAY}"></label></div>
+        ${chips([])}
+        <div class="fm"><label>Занятий в неделю<select name="pw"><option>2</option><option>3</option></select></label>
+        <label>Дата первого занятия<input type="date" name="first"></label></div>
+        <div class="row"><button data-a="newab">Добавить абонемент</button></div>
+      </div>
+    </details>
+
+    ${Object.entries(S).map(([c,s])=>stu(c,s)).join('')}
   </div>
   </div>`;
   bindThemes();
-  const sbToggle=$('#sb-toggle'), sbWrap=$('#sb-wrap');
-  if(sbToggle){
-    sbToggle.onclick=()=>{
-      sbWrap.classList.toggle('hidden');
-      sbToggle.textContent = sbWrap.classList.contains('hidden') ? 'Показать настройки ⚙️' : 'Скрыть настройки ⚙️';
-    };
-  }
 }
 
 function onAct(e){
@@ -536,7 +597,10 @@ function onAct(e){
 }
 
 function tokenScreen(){
-  app.innerHTML=`<header><div></div>${themeSwitch()}</header>
+  app.innerHTML=`<header>
+    <div class="header-left"><button class="sidebar-toggle-btn main-header-btn" onclick="toggleSidebar()">☰</button><div></div></div>
+    ${themeSwitch()}
+  </header>
   <form class="card login" id="tf"><h1>Подключение к GitHub</h1>
   <p class="sub">Один раз на этом устройстве вставьте токен доступа к репозиторию. Он хранится только в этом браузере.</p>
   <input id="tk" type="password" autocomplete="off" placeholder="github_pat_…"><div class="err"></div><button>Подключить</button></form>`;
