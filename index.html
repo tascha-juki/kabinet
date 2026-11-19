@@ -316,7 +316,7 @@ function render(st, rules, holidays){
   `;
 
   const isAsya = st.name.trim().toLowerCase() === 'ася';
-  const catImg = (isAsya && burned > 0) ? `<img = cat.png'" alt="Котик" class="cat-on-burn">` : '';
+  const catImg = (isAsya && burned > 0) ? `<img src="cat.png" alt="Котик" class="cat-on-burn">` : '';
 
   app.innerHTML=`
   <header>
