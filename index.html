@@ -384,7 +384,7 @@ function view(){
   </details></section>
 
   ${Object.entries(S).map(([c,s])=>stu(c,s)).join('')}
-  <section class="card"><details><summary>Правила отмен и переносов</summary><p class="sub">Одно правило на строку. Общие для всех учеников.</p>
+  <section class="card"><details><summary>Правила отмен и переносов</summary>
     <textarea name="rules">${esc((D.rules||[]).join('\n'))}</textarea><div class="row"><button data-a="rules">Сохранить правила</button></div></details></section>
 
   <section class="card"><details><summary>Каникулы и праздники</summary>${holidaysEditor()}</details></section>
