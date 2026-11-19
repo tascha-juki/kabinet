@@ -229,7 +229,7 @@
         "lessons": 8,
         "price": "16000"
       },
-      "paidDate": "2026-10-12",
+      "paidDate": "2026-11-09",
       "days": [
         1,
         4
@@ -237,39 +237,49 @@
       "perWeek": 2,
       "lessons": [
         {
-          "date": "2026-10-12",
-          "status": "attended"
+          "date": "2026-11-09",
+          "status": "planned"
         },
         {
-          "date": "2026-10-15",
-          "status": "attended"
+          "date": "2026-11-12",
+          "status": "planned"
         },
         {
-          "date": "2026-10-19",
-          "status": "attended"
+          "date": "2026-11-16",
+          "status": "planned"
         },
         {
-          "date": "2026-10-22",
-          "status": "attended"
+          "date": "2026-11-19",
+          "status": "planned"
         },
         {
-          "date": "2026-10-26",
-          "status": "attended"
+          "date": "2026-11-23",
+          "status": "planned"
         },
         {
-          "date": "2026-10-29",
-          "status": "attended"
+          "date": "2026-11-26",
+          "status": "planned"
         },
         {
-          "date": "2026-11-02",
-          "status": "attended"
+          "date": "2026-11-30",
+          "status": "planned"
         },
         {
-          "date": "2026-11-05",
-          "status": "attended"
+          "date": "2026-12-03",
+          "status": "planned"
         }
       ],
-      "history": []
+      "history": [
+        {
+          "lessons": 8,
+          "attended": 8,
+          "burned": 0,
+          "moved": 0,
+          "from": "2026-10-12",
+          "to": "2026-11-21",
+          "price": "16000"
+        }
+      ]
     }
   },
   "holidays": [
