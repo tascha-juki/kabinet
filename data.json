@@ -17,6 +17,16 @@
       "paidDate": "2026-11-11",
       "lessons": [],
       "receipts": []
+    },
+    "6570": {
+      "name": "Оля",
+      "plan": {
+        "lessons": 8,
+        "price": "16000"
+      },
+      "paidDate": "2026-11-02",
+      "lessons": [],
+      "receipts": []
     }
   }
 }
