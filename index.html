@@ -23,7 +23,20 @@
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;transition:background .3s; overflow-x: hidden;}
 
-main{max-width:800px;margin:0 auto;padding:18px 16px 56px;position:relative;transition:transform .3s, margin-left .3s}
+/* Контейнер, который сдвигается при открытии меню */
+#app-wrapper {
+  transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+@media(min-width:850px) {
+  body.sb-open #app-wrapper {
+    padding-left: var(--sidebar-w);
+  }
+}
+
+main{max-width:800px;width:100%;margin:0 auto;padding:18px 16px 56px;position:relative;}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:24px}
 h1{font-size:1.4rem;line-height:1.2;margin:0;font-weight:500}
 h2{font-size:1.05rem;margin:0 0 16px;font-weight:500}
@@ -157,16 +170,6 @@ input[type=checkbox]{width:auto;padding:0;accent-color:var(--p)}
 #overlay{position:fixed;inset:0;background:rgba(0,0,0,0.2);z-index:90;opacity:0;pointer-events:none;transition:opacity .3s}
 #overlay.on{opacity:1;pointer-events:auto}
 
-/* Десктопное поведение */
-@media(min-width:850px){
-  .sidebar{transform:translateX(-100%);box-shadow:none}
-  .sidebar.open{transform:translateX(0);box-shadow:2px 0 12px rgba(0,0,0,0.05)}
-  main{margin-left:0;max-width:900px; transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);}
-  /* Возвращаем сдвиг контента */
-  body.sb-open main{margin-left:var(--sidebar-w);}
-  body.sb-open #overlay{opacity:0;pointer-events:none}
-}
-
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--tx);color:#fff;padding:12px 20px;border-radius:12px;z-index:1000;display:none;max-width:90vw;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.1);font-size:.9rem}
 #toast.bad{background:var(--burn)}
 button:focus-visible,summary:focus-visible,input:focus-visible,figure:focus-visible{outline:2px solid var(--p);outline-offset:2px}
@@ -186,7 +189,11 @@ button:focus-visible,summary:focus-visible,input:focus-visible,figure:focus-visi
   </div>
 </aside>
 
-<main id="app"></main>
+<!-- Оборачиваем main в контейнер для сдвига -->
+<div id="app-wrapper">
+  <main id="app"></main>
+</div>
+
 <div id="toast" role="status"></div>
 
 <script>
