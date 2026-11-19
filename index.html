@@ -51,10 +51,27 @@ h2{font-size:1.05rem;margin:0 0 16px;font-weight:500}
 .slot.done{background:var(--p);border:2px solid var(--p);color:#fff}
 .slot.burn{background:repeating-linear-gradient(45deg,var(--burns) 0 6px,#ffd2b8 6px 12px);border:2px solid var(--burn);color:var(--burn)}
 .stats{display:flex;gap:8px;flex-wrap:wrap}
-.stat{flex:1 1 90px;border-radius:12px;background:var(--ps);padding:12px;text-align:center}
+.stat{flex:1 1 90px;border-radius:12px;background:var(--ps);padding:12px;text-align:center;position:relative}
 .stat b{display:block;font-size:1.4rem;line-height:1.1;font-weight:600}
 .stat span{font-size:.8rem;color:var(--mu)}
 .stat.burn{background:var(--burns)}.stat.burn b{color:var(--burn)}
+
+/* Кот */
+.cat-on-burn {
+  position: absolute;
+  right: -10px;
+  bottom: -5px;
+  width: 90px;
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+  transition: transform 0.2s;
+  z-index: 2;
+}
+.stat.burn:hover .cat-on-burn {
+  transform: translateY(-3px) scale(1.05) rotate(-3deg);
+}
+
 ul.list{list-style:none;margin:0;padding:0}
 ul.list li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--ln);font-size:.95rem}
 ul.list li:last-child{border:0}
@@ -309,6 +326,10 @@ function render(st, rules, holidays){
     </div>
   `;
 
+  // Проверяем, Ася ли это, чтобы добавить кота
+  const isAsya = st.name.trim().toLowerCase() === 'ася';
+  const catImg = isAsya ? `<img src="https://i.imgur.com/uYxY5C1.png" alt="Котик" class="cat-on-burn">` : '';
+
   app.innerHTML=`
   <header>
     <div class="header-left">
@@ -336,7 +357,10 @@ function render(st, rules, holidays){
     <div class="stats">
       <div class="stat"><b>${done}</b><span>посещено</span></div>
       <div class="stat"><b>${left}</b><span>осталось</span></div>
-      <div class="stat burn"><b>${burned}</b><span>сгорело</span></div>
+      <div class="stat burn">
+        <b>${burned}</b><span>сгорело</span>
+        ${catImg}
+      </div>
     </div>
   </section>
 
