@@ -1,3 +1,10 @@
+Проблема с «уезжающим» блоком возникает из-за конфликта стилей: глобальное правило `.card:hover { transform: translateY(-1px); }` перебивает `transform` у формы входа, из-за чего она теряет центрирование (`translate(-50%, -50%)`) и съезжает. 
+
+«Три сопли» справа — это полоса прокрутки браузера, которая появляется из-за того, что форма входа имеет `position: fixed` и `top: 50%`, а высота `body` при этом может чуть-чуть превышать 100vh (например, из-за скрытых элементов или отступов). Мы это исправим.
+
+Вот обновленный код:
+
+```html
 <!DOCTYPE html>
 <html lang="ru" data-theme="blue">
 <head>
@@ -21,7 +28,7 @@
 [data-theme=winter]{--bg:#f0f5fa;--p:#5c9ecf;--ps:#e6f2fa;--tx:#2c3e50;--mu:#7f8c8d;--ln:#dce6f0;--burn:#d35400;--burns:#fdebd0}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;transition:background .3s}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;transition:background .3s; overflow-x: hidden;}
 
 main{max-width:800px;margin:0 auto;padding:18px 16px 56px;position:relative;transition:transform .3s, margin-left .3s}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:24px}
@@ -42,7 +49,9 @@ h2{font-size:1.05rem;margin:0 0 16px;font-weight:500}
 @keyframes snow{from{background-position:0 0, 20px 20px}to{background-position:0 100vh, 20px calc(100vh + 20px)}}
 
 .card{background:var(--card);border-radius:var(--r);padding:20px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,0.02);transition:transform .2s}
-.card:hover{transform:translateY(-1px)}
+/* Убираем эффект наведения для формы входа, чтобы она не уезжала */
+.card:hover:not(.login){transform:translateY(-1px)}
+
 .plan{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-end}
 .plan .big{font-size:2rem;font-weight:600;line-height:1;color:var(--p)}
 .plan .price{font-size:1.25rem;font-weight:500}
@@ -90,14 +99,15 @@ details li{margin-bottom:6px}
 
 /* Центрированная форма входа */
 .login{
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
+  position: fixed !important; /* Принудительно фиксируем */
+  top: 50% !important; 
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important; /* Жестко центрируем */
   width: 100%;
   max-width: 380px;
   text-align: center;
   z-index: 10;
-  margin: 0;
+  margin: 0 !important;
 }
 .login input{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--ln);font:inherit;margin:10px 0;text-align:center;background:var(--bg)}
 .login button{width:100%;padding:12px;border:0;border-radius:12px;background:var(--p);color:#fff;font:inherit;font-weight:500;cursor:pointer;transition:opacity .2s}
