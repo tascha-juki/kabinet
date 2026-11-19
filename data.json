@@ -34,7 +34,8 @@
         },
         {
           "date": "2026-11-20",
-          "status": "planned"
+          "status": "moved",
+          "movedTo": "2026-11-23"
         },
         {
           "date": "2026-11-23",
@@ -46,6 +47,10 @@
         },
         {
           "date": "2026-11-27",
+          "status": "planned"
+        },
+        {
+          "date": "2026-11-30",
           "status": "planned"
         }
       ],
