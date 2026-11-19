@@ -94,6 +94,12 @@ details li{margin-bottom:6px}
 .adm .chip input{position:absolute;opacity:0;width:0;height:0;padding:0;border:0}
 .adm .chk{display:flex;align-items:center;gap:6px;font-size:.88rem;color:var(--mu)}
 .adm input[type=checkbox]{width:auto;padding:0}
+/* диапазоны каникул */
+.adm .rng{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;margin:8px 0}
+.adm .rng label{display:flex;flex-direction:column;gap:3px;font-size:.82rem;color:var(--mu)}
+.adm .rng button{white-space:nowrap}
+.holrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--ln)}
+.holrow:last-child{border:0}
 .warn{color:var(--burn);font-size:.9rem}
 #toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--tx);color:#fff;padding:10px 16px;border-radius:12px;z-index:10;display:none;max-width:90vw;text-align:center}
 #toast.bad{background:var(--burn)}
@@ -159,7 +165,7 @@ function render(st, rules, holidays){
   const total = st.plan.lessons;
   const L = (st.lessons||[]).slice().sort((a,b)=>a.date.localeCompare(b.date));
   const cnt = k => L.filter(l=>l.status===k).length;
-  const done = cnt('attended'), burned = cnt('burned'), moved = cnt('moved'), cancelled = cnt('cancelled');
+  const done = cnt('attended'), burned = cnt('burned');
   const left = Math.max(total-done-burned,0);
 
   const from = parse(st.paidDate);
@@ -197,9 +203,15 @@ function render(st, rules, holidays){
       </div>
     </div>`).join('')}</div>` : '<p class="empty">Пока это первый абонемент.</p>';
 
-  /* нерабочие дни: ближайшие 5 в пределах абонемента */
-  const hs = (holidays||[]).map(d=>({d,dt:parse(d)})).filter(x=>x.dt>=today&&x.dt<=to).sort((a,b)=>a.d-b.d).slice(0,5);
-  const holHTML = hs.length ? `<ul class="list">${hs.map(x=>`<li><span>${esc(fmtShort(x.dt))}</span><span class="tag off">нерабочий</span></li>`).join('')}</ul>`
+  /* нерабочие диапазоны, пересекающиеся с абонементом */
+  const hs = (holidays||[])
+    .map(h=>typeof h==='string'?{from:h,to:h}:h)
+    .filter(h=>h.from&&h.to)
+    .map(h=>({from:parse(h.from),to:parse(h.to)}))
+    .filter(h=>h.to>=from&&h.from<=to)
+    .sort((a,b)=>a.from-b.from)
+    .slice(0,6);
+  const holHTML = hs.length ? `<ul class="list">${hs.map(h=>`<li><span>${fmtShort(h.from)}${h.from.getTime()!==h.to.getTime()?' — '+fmtShort(h.to):''}</span><span class="tag off">нерабочие</span></li>`).join('')}</ul>`
     : '<p class="empty">На этот абонемент нерабочих дней нет.</p>';
 
   app.innerHTML=`
@@ -256,7 +268,7 @@ async function gh(path,method='GET',body){
   if(!r.ok) throw new Error(r.status===401?'Токен не подходит или истёк':(r.status===403||r.status===404)?'Нет доступа к репозиторию '+R+'. Проверьте права токена':(r.status===409||r.status===422)?'Данные изменились на GitHub. Обновите страницу':(j.message||r.status));
   return j;
 }
-async function load(){const j=await gh('data.json');SHA=j.sha;D=JSON.parse(dec(j.content));D.students=D.students||{};D.holidays=D.holidays||[];D.rules=D.rules||[]}
+async function load(){const j=await gh('data.json');SHA=j.sha;D=JSON.parse(dec(j.content));D.students=D.students||{};D.holidays=normHolidays(D.holidays);D.rules=D.rules||[]}
 async function save(msg){const j=await gh('data.json','PUT',{message:msg,content:enc(JSON.stringify(D,null,2)),sha:SHA});SHA=j.content.sha}
 async function act(fn,msg){
   try{await fn();await save(msg);view();toast('Сохранено. На сайте изменения появятся через 1–2 минуты')}
@@ -269,10 +281,30 @@ const DN=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
 const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
 const byDate=(a,b)=>a.date.localeCompare(b.date);
 function endDate(st){if(st.validTo)return parse(st.validTo);const d=parse(st.paidDate);d.setDate(d.getDate()+(st.validDays||40));return d}
-const holidays=()=>(D&&D.holidays||[]);
+
+/* каникулы: нормализуем старый формат (плоский список дат) в диапазоны */
+function normHolidays(arr){
+  const out=[];
+  (arr||[]).forEach(h=>{
+    if(typeof h==='string'){
+      if(/^\d{4}-\d{2}-\d{2}$/.test(h)) out.push({from:h,to:h});
+    }else if(h&&h.from&&h.to&&/^\d{4}-\d{2}-\d{2}$/.test(h.from)&&/^\d{4}-\d{2}-\d{2}$/.test(h.to)){
+      out.push({from:h.from,to:h.to>=h.from?h.to:h.from});
+    }
+  });
+  return out.sort((a,b)=>a.from.localeCompare(b.from));
+}
+function holidaySet(){
+  const s=new Set();
+  (D&&D.holidays||[]).forEach(h=>{
+    const a=parse(h.from),b=parse(h.to);
+    for(let d=new Date(a);d<=b;d.setDate(d.getDate()+1)) s.add(iso(d));
+  });
+  return s;
+}
 function layout(s,start,n){ /* первая дата — start, остальные — ближайшие дни недели ученика, пропуская праздники */
   const out=[start];let d=parse(start);
-  const hol=new Set(holidays());
+  const hol=holidaySet();
   while(out.length<n){do d.setDate(d.getDate()+1);while(!s.days.includes(d.getDay())||hol.has(iso(d)));out.push(iso(d))}
   return out}
 function move(s,i,nd,shift){ /* занятие i переносится на nd; при shift остальные запланированные расставляются заново после него */
@@ -312,6 +344,18 @@ ${warnTxt(s)}
 ${(s.history||[]).length?`<ul class="list">${s.history.slice().reverse().map(h=>`<li><span>${h.lessons} зан. · ${h.from?fmt(parse(h.from)):''}${h.to?' — '+fmt(parse(h.to)):''}</span><span class="tag off">посещ. ${h.attended||0} · перенос ${h.moved||0} · сгор. ${h.burned||0}</span></li>`).join('')}</ul>`:'<p class="empty">Пока это первый абонемент.</p>'}
 </details></section>`;
 
+/* редактор каникул как диапазонов */
+function holidaysEditor(){
+  const hs=normHolidays(D.holidays);
+  return `<p class="sub">Диапазон дат, который пропускает автоматическая расстановка (отпуск, праздники). Например, 26.12.26 — 05.01.27.</p>
+  ${hs.length?`<div>${hs.map((h,i)=>`<div class="holrow"><span>${fmt(parse(h.from))} — ${fmt(parse(h.to))}</span><button class="red" data-a="delhol" data-i="${i}">×</button></div>`).join('')}</div>`:'<p class="empty">Пока нерабочих дней нет.</p>'}
+  <div class="rng">
+    <label>С<input type="date" name="hfrom" value="${TODAY}"></label>
+    <label>По<input type="date" name="hto" value="${TODAY}"></label>
+    <button data-a="addhol">Добавить</button>
+  </div>`;
+}
+
 function view(){
   const S=D.students;
   app.innerHTML=`<div class="adm"><header><div><h1>Кабинет преподавателя</h1><p class="sub">Учеников: ${Object.keys(S).length}</p></div>${themeSwitch()}</header>
@@ -343,9 +387,7 @@ function view(){
   <section class="card"><details><summary>Правила отмен и переносов</summary><p class="sub">Одно правило на строку. Общие для всех учеников.</p>
     <textarea name="rules">${esc((D.rules||[]).join('\n'))}</textarea><div class="row"><button data-a="rules">Сохранить правила</button></div></details></section>
 
-  <section class="card"><details><summary>Каникулы и праздники</summary>
-    <p class="sub">По одной дате <code>ГГГГ-ММ-ДД</code> на строку. Автоматическая расстановка и «сдвинуть остальные» будут их пропускать.</p>
-    <textarea name="holidays">${esc((D.holidays||[]).join('\n'))}</textarea><div class="row"><button data-a="holidays">Сохранить нерабочие дни</button></div></details></section>
+  <section class="card"><details><summary>Каникулы и праздники</summary>${holidaysEditor()}</details></section>
 
   <section class="card"><details><summary>Настройки</summary>
     <div class="fm"><label>Код преподавателя<input name="admin" value="${esc(D.admin)}" inputmode="numeric"></label></div>
@@ -401,9 +443,12 @@ function onAct(e){
     case 'st':act(()=>{s.lessons[i].status=el.value},'Статус занятия');break;
     case 'dell':act(()=>{s.lessons.splice(i,1)},'Удаление занятия');break;
     case 'rules':act(()=>{D.rules=box.querySelector('[name=rules]').value.split('\n').map(x=>x.trim()).filter(Boolean)},'Правила');break;
-    case 'holidays':{
-      const arr=box.querySelector('[name=holidays]').value.split('\n').map(x=>x.trim()).filter(x=>/^\d{4}-\d{2}-\d{2}$/.test(x));
-      act(()=>{D.holidays=arr},'Каникулы и праздники');break}
+    case 'addhol':{
+      const f=v('hfrom'),t=v('hto');
+      if(!f||!t)return toast('Укажите обе даты',1);
+      if(t<f)return toast('Дата «по» раньше даты «с»',1);
+      act(()=>{D.holidays=normHolidays([...(D.holidays||[]),{from:f,to:t}])},'Каникулы');break}
+    case 'delhol':act(()=>{const hs=normHolidays(D.holidays);hs.splice(i,1);D.holidays=hs},'Удаление каникул');break;
     case 'newab':{
       const t=box.querySelector('[name=target]').value;
       if(!t||!D.students[t])return toast('Выберите ученика',1);
