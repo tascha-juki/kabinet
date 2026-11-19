@@ -359,7 +359,8 @@ function holidaysEditor(){
 function view(){
   const S=D.students;
   app.innerHTML=`<div class="adm"><header><div><h1>Кабинет преподавателя</h1><p class="sub">Учеников: ${Object.keys(S).length}</p></div>${themeSwitch()}</header>
-  <section class="card"><h2>Новый ученик</h2>
+  
+  <section class="card"><details><summary>Новый ученик</summary>
     <div class="fm"><label>Имя<input name="name"></label>
     <label>Занятий в абонементе<select name="n"><option>8</option><option>12</option></select></label>
     <label>Стоимость<input name="price" placeholder="12 000 ₽"></label>
@@ -369,9 +370,10 @@ function view(){
     <div class="fm"><label>Занятий в неделю<select name="pw"><option>2</option><option>3</option></select></label>
     <label>Дата первого занятия<input type="date" name="first"></label></div>
     <div class="row"><button data-a="add">Добавить ученика</button></div>
-    <p class="sub">Код из 4 цифр создастся автоматически, его можно поменять в карточке ученика.</p></section>
+    <p class="sub">Код из 4 цифр создастся автоматически, его можно поменять в карточке ученика.</p>
+  </details></section>
 
-  <section class="card" data-ab><h2>Добавить абонемент</h2>
+  <section class="card" data-ab><details><summary>Добавить абонемент</summary>
     <p class="sub">Текущий абонемент уйдёт в историю, новый начнётся с чистого расписания.</p>
     <div class="fm"><label>Ученик<select name="target">${Object.entries(S).map(([c,s])=>`<option value="${esc(c)}">${esc(s.name)}</option>`).join('')||'<option value="">— нет учеников —</option>'}</select></label>
     <label>Занятий в абонементе<select name="n"><option>8</option><option>12</option></select></label>
@@ -381,7 +383,7 @@ function view(){
     <div class="fm"><label>Занятий в неделю<select name="pw"><option>2</option><option>3</option></select></label>
     <label>Дата первого занятия<input type="date" name="first"></label></div>
     <div class="row"><button data-a="newab">Добавить абонемент</button></div>
-  </section>
+  </details></section>
 
   ${Object.entries(S).map(([c,s])=>stu(c,s)).join('')}
   <section class="card"><details><summary>Правила отмен и переносов</summary><p class="sub">Одно правило на строку. Общие для всех учеников.</p>
