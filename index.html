@@ -13,7 +13,7 @@
   --burn:#e74c3c;--burns:#fdf0ed;--r:16px;
   --shadow:0 2px 12px rgba(0,0,0,0.04);
   --sidebar-bg: #ffffff;
-  --sidebar-w: 320px; /* Увеличили ширину */
+  --sidebar-w: 320px; 
 }
 [data-theme=green]{--bg:#f2f9f5;--p:#27ae60;--ps:#e9f7ef;--tx:#1e2e25;--mu:#6e8a78;--ln:#d5ebd9}
 [data-theme=pink]{--bg:#fdf5f7;--p:#e84393;--ps:#fceef4;--tx:#3a1c29;--mu:#8a6e78;--ln:#f5dce7}
@@ -23,7 +23,6 @@
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;transition:background .3s}
 
-/* Центрирование */
 main{max-width:800px;margin:0 auto;padding:18px 16px 56px;position:relative;transition:transform .3s, margin-left .3s}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:24px}
 h1{font-size:1.4rem;line-height:1.2;margin:0;font-weight:500}
@@ -38,7 +37,7 @@ h2{font-size:1.05rem;margin:0 0 16px;font-weight:500}
 .themes [data-t=blue]{background:#4a90e2}.themes [data-t=green]{background:#27ae60}.themes [data-t=pink]{background:#e84393}.themes [data-t=lavender]{background:#8e44ad}
 .themes [data-t=winter]{background:#5c9ecf;background-image:radial-gradient(circle, #fff 20%, transparent 20%);background-size:6px 6px}
 
-/* Снежинки для новогодней темы */
+/* Снежинки */
 [data-theme=winter] body::before{content:"";position:fixed;inset:0;background-image:radial-gradient(circle, #fff 2px, transparent 2px), radial-gradient(circle, #fff 1px, transparent 1px);background-size:60px 60px, 40px 40px;background-position:0 0, 20px 20px;opacity:0.6;z-index:-1;pointer-events:none;animation:snow 20s linear infinite}
 @keyframes snow{from{background-position:0 0, 20px 20px}to{background-position:0 100vh, 20px calc(100vh + 20px)}}
 
@@ -50,7 +49,6 @@ h2{font-size:1.05rem;margin:0 0 16px;font-weight:500}
 .dates{margin-top:16px;padding-top:16px;border-top:1px dashed var(--ln);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .pill{display:inline-block;padding:3px 12px;border-radius:99px;background:var(--ps);color:var(--p);font-size:.85rem;font-weight:500}
 .pill.bad{background:var(--burns);color:var(--burn)}
-/* карточка-абонемент */
 .slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:8px;margin:8px 0 16px}
 .slot{aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-weight:500;font-size:.9rem;border:2px dashed var(--ln);color:var(--mu)}
 .slot.done{background:var(--p);border:2px solid var(--p);color:#fff}
@@ -61,21 +59,8 @@ h2{font-size:1.05rem;margin:0 0 16px;font-weight:500}
 .stat span{font-size:.8rem;color:var(--mu)}
 .stat.burn{background:var(--burns)}.stat.burn b{color:var(--burn)}
 
-/* Кот */
-.cat-on-burn {
-  position: absolute;
-  right: -10px;
-  bottom: -5px;
-  width: 90px;
-  height: auto;
-  pointer-events: none;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
-  transition: transform 0.2s;
-  z-index: 2;
-}
-.stat.burn:hover .cat-on-burn {
-  transform: translateY(-3px) scale(1.05) rotate(-3deg);
-}
+.cat-on-burn {position: absolute;right: -10px;bottom: -5px;width: 90px;height: auto;pointer-events: none;filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));transition: transform 0.2s;z-index: 2;}
+.stat.burn:hover .cat-on-burn {transform: translateY(-3px) scale(1.05) rotate(-3deg);}
 
 ul.list{list-style:none;margin:0;padding:0}
 ul.list li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--ln);font-size:.95rem}
@@ -85,7 +70,6 @@ ul.list li:last-child{border:0}
 .tag.off{background:#f0f2f5;color:#7f8c8d}
 .tag.plan{background:#fff;border:1px solid var(--ln);color:var(--mu)}
 
-/* Аккордеоны */
 details{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);border:1px solid rgba(0,0,0,0.02);margin-bottom:12px;overflow:hidden}
 details summary{cursor:pointer;font-weight:500;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:18px 20px;background:var(--card);transition:background .2s;user-select:none}
 details summary:hover{background:var(--ps)}
@@ -97,21 +81,30 @@ details h2{margin-top:16px}
 details ul{margin:0;padding-left:20px;color:var(--tx)}
 details li{margin-bottom:6px}
 
-/* история абонементов */
 .hist{display:flex;flex-direction:column;gap:10px}
 .hist .ab{border:1px solid var(--ln);border-radius:12px;padding:14px;background:var(--ps)}
 .hist .ab .hd{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-weight:500}
 .hist .ab .dt{color:var(--mu);font-size:.82rem;font-weight:400}
 .hist .ab .nums{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .hist .ab .nums span{background:#fff;border-radius:8px;padding:4px 10px;font-size:.85rem;color:var(--mu)}
-.login{max-width:380px;margin:12vh auto 0;text-align:center}
-.login input{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--ln);font:inherit;margin:10px 0;text-align:center;background:var(--card)}
+
+/* Центрированная форма входа */
+.login{
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  z-index: 10;
+  margin: 0;
+}
+.login input{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--ln);font:inherit;margin:10px 0;text-align:center;background:var(--bg)}
 .login button{width:100%;padding:12px;border:0;border-radius:12px;background:var(--p);color:#fff;font:inherit;font-weight:500;cursor:pointer;transition:opacity .2s}
 .login button:hover{opacity:.9}
 .err{color:var(--burn);font-size:.9rem;min-height:1.3em}
 .empty{color:var(--mu);font-size:.92rem;margin:0}
 
-/* Формы */
 input,select,textarea{font:inherit;padding:10px 12px;border:1.5px solid var(--ln);border-radius:10px;background:var(--bg);color:var(--tx);width:100%;min-width:0;transition:border .2s}
 input:focus,select:focus,textarea:focus{border-color:var(--p);outline:none}
 textarea{min-height:160px;resize:vertical}
@@ -147,12 +140,7 @@ input[type=checkbox]{width:auto;padding:0;accent-color:var(--p)}
 .sidebar.open{transform:translateX(0)}
 .sidebar .sb-header{padding:16px 20px;display:flex;align-items:center;gap:8px;font-weight:600;font-size:1.1rem;border-bottom:1px solid var(--ln)}
 .sidebar .sb-content{padding:16px 12px;overflow-y:auto;flex-grow:1}
-.sb-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;cursor:pointer;color:var(--tx);font-size:.95rem;transition:background .15s;text-decoration:none;font-weight:500}
-.sb-item:hover{background:var(--ps)}
-.sb-item.active{background:var(--ps);color:var(--p)}
 .sb-section{font-size:.75rem;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin:20px 12px 8px;display:flex;justify-content:space-between;align-items:center}
-.sb-section span{cursor:pointer;padding:2px 6px;border-radius:4px}
-.sb-section span:hover{background:var(--ps);color:var(--tx)}
 .sidebar .inner{padding:0 12px 20px 12px}
 .sidebar details{background:transparent;box-shadow:none;border:0;margin-bottom:0}
 .sidebar details summary{padding:8px 12px;border-radius:6px;font-weight:500;font-size:.95rem}
@@ -171,7 +159,6 @@ input[type=checkbox]{width:auto;padding:0;accent-color:var(--p)}
 @media(min-width:850px){
   .sidebar{transform:translateX(-100%);box-shadow:none}
   .sidebar.open{transform:translateX(0);box-shadow:2px 0 12px rgba(0,0,0,0.05)}
-  /* Центрируем контент при открытом меню */
   main{margin-left:0;max-width:900px}
   body.sb-open main{margin-left:var(--sidebar-w)}
   body.sb-open #overlay{opacity:0;pointer-events:none}
@@ -254,15 +241,21 @@ try{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.
 
 /* вход по коду */
 function login(msg){
-  app.innerHTML=`<header>
-    <div class="header-left"><button class="sidebar-toggle-btn main-header-btn" onclick="toggleSidebar()">☰</button><div></div></div>
+  // Шапка с кнопкой меню, форма входа отцентрована независимо от main
+  app.innerHTML=`
+  <header>
+    <div class="header-left"><button class="sidebar-toggle-btn main-header-btn" onclick="toggleSidebar()">☰</button></div>
   </header>
-  <form class="card login" id="f">
+  
+  <div class="card login">
     <h1>Личный кабинет</h1>
     <p class="sub">Введите код, который прислал преподаватель</p>
-    <input id="code" autocomplete="off" inputmode="numeric" maxlength="8" placeholder="Код" aria-label="Код ученика">
-    <div class="err">${esc(msg||'')}</div>
-    <button>Войти</button></form>`;
+    <form id="f">
+      <input id="code" autocomplete="off" inputmode="numeric" maxlength="8" placeholder="Код" aria-label="Код ученика">
+      <div class="err">${esc(msg||'')}</div>
+      <button>Войти</button>
+    </form>
+  </div>`;
   
   $('#sidebar-content').innerHTML = `
     <div class="sb-section">Цвет оформления</div>
@@ -323,7 +316,6 @@ function render(st, rules, holidays){
   const holHTML = hs.length ? `<ul class="list">${hs.map(h=>`<li><span>${fmtShort(h.from)}${h.from.getTime()!==h.to.getTime()?' — '+fmtShort(h.to):''}</span><span class="tag off">нерабочие</span></li>`).join('')}</ul>`
     : '<p class="empty">На этот абонемент нерабочих дней нет.</p>';
 
-  // Заполняем сайдбар для ученика
   $('#sidebar-content').innerHTML = `
     <div class="sb-section">Цвет оформления</div>
     <div class="inner">${themeSwitch()}</div>
@@ -334,9 +326,8 @@ function render(st, rules, holidays){
     </div>
   `;
 
-  // Проверяем, Ася ли это, чтобы добавить кота
   const isAsya = st.name.trim().toLowerCase() === 'ася';
-  const catImg = isAsya ? `<cat.png" alt="Котик" class="cat-on-burn">` : '';
+  const catImg = (isAsya && burned > 0) ? `<img src="cat.png" onerror="this.src='https://i.imgur.com/uYxY5C1.png'" alt="Котик" class="cat-on-burn">` : '';
 
   app.innerHTML=`
   <header>
@@ -487,7 +478,6 @@ function holidaysEditor(){
 function view(){
   const S=D.students;
   
-  // Заполняем сайдбар для препода
   $('#sidebar-content').innerHTML = `
     <div class="sb-section">Цвет оформления</div>
     <div class="inner">${themeSwitch()}</div>
@@ -561,21 +551,26 @@ function onAct(e){
   if((e.type==='click')===pick)return;
   
   const a=el.dataset.a;
-  // Ищем ближайший контейнер для форм: если мы в сайдбаре, ищем там, иначе в секции или details
-  let box=el.closest('#sidebar');
-  if(!box) box=el.closest('.inner')||el.closest('section');
   
-  const c=box.dataset?.c;
-  const s=c?D.students[c]:null;
-  const i=+el.dataset.i;
+  let box=el.closest('#sidebar'); 
+  if(!box) {
+    box=el.closest('.inner') || el.closest('section') || el.closest('details[data-c]');
+    if (box && !box.dataset.c) {
+      const parentDetails = box.closest('details[data-c]');
+      if (parentDetails) box = parentDetails;
+    }
+  }
   
-  // Универсальный поиск значений: если в box (сайдбаре), ищем по всему сайдбару
-  const v=n=>{
+  const c = box.dataset?.c;
+  const s = c ? D.students[c] : null;
+  const i = +el.dataset.i;
+  
+  const v = n => {
     const target = box.querySelector(`[name="${n}"]`);
     return target ? target.value.trim() : '';
   };
   
-  OPEN=c||null;
+  OPEN = c || null;
   
   switch(a){
     case 'add':{
@@ -586,21 +581,26 @@ function onAct(e){
         if(auto)ns.lessons=layout(ns,first,+v('n')).map(d=>({date:d,status:'planned'}));
         D.students[k]=ns;OPEN=k},'Новый ученик');break}
     case 'save':{
+      if(!s) return;
       const nc=v('code');
       if(nc!==c&&(!/^\d{4}$/.test(nc)||D.students[nc]||nc===D.admin))return toast('Код: 4 цифры, не совпадающие с кодом другого ученика',1);
       act(()=>{Object.assign(s,sched(box),{name:v('name'),paidDate:v('paid'),plan:{lessons:+v('n'),price:v('price')}});
         if(nc!==c){D.students[nc]=s;delete D.students[c];OPEN=nc}},'Правка: '+v('name'));break}
     case 'link':{
+      if(!s) return;
       const u=location.origin+location.pathname+'?s='+c;
       navigator.clipboard.writeText(u).then(()=>toast('Ссылка скопирована'),()=>toast(u));break}
     case 'del':
+      if(!s) return;
       if(!confirm('Удалить ученика «'+s.name+'» вместе с историей?'))return;
       act(()=>{delete D.students[c];OPEN=null},'Удаление ученика');break;
     case 'addl':
+      if(!s) return;
       if(!v('ld'))return toast('Выберите дату',1);
       act(()=>{(s.lessons=s.lessons||[]).push({date:v('ld'),status:v('ls'),...(v('ln')?{note:v('ln')}:{})});
         s.lessons.sort((x,y)=>x.date.localeCompare(y.date))},'Занятие: '+s.name);break;
     case 'gen':{
+      if(!s) return;
       const sc=sched(box),first=v('first');
       if(!first)return toast('Укажите дату первого занятия',1);
       if(sc.days.length!==sc.perWeek)return toast('Отметьте ровно '+sc.perWeek+' дня недели',1);
@@ -610,20 +610,27 @@ function onAct(e){
       act(()=>{Object.assign(s,sc);
         s.lessons=(s.lessons||[]).filter(l=>l.status!=='planned').concat(layout(s,first,k).map(d=>({date:d,status:'planned'}))).sort(byDate)},'Расписание: '+s.name);break}
     case 'mv':{
+      if(!s) return;
       const nd=v('md'+i),sh=box.querySelector('[name=ms'+i+']').checked,L=s.lessons[i];
       if(!nd)return toast('Выберите новую дату',1);
       if(sh&&nd<=L.date)return toast('Чтобы сдвинуть остальные занятия, новая дата должна быть позже',1);
       if(sh&&!(s.days||[]).length)return toast('Сначала отметьте дни занятий и нажмите «Сохранить»',1);
       act(()=>move(s,i,nd,sh),'Перенос занятия: '+s.name);break}
-    case 'st':act(()=>{s.lessons[i].status=el.value},'Статус занятия');break;
-    case 'dell':act(()=>{s.lessons.splice(i,1)},'Удаление занятия');break;
-    case 'rules':act(()=>{D.rules=box.querySelector('[name=rules]').value.split('\n').map(x=>x.trim()).filter(Boolean)},'Правила');break;
+    case 'st':
+      if(!s) return;
+      act(()=>{s.lessons[i].status=el.value},'Статус занятия');break;
+    case 'dell':
+      if(!s) return;
+      act(()=>{s.lessons.splice(i,1)},'Удаление занятия');break;
+    case 'rules':
+      act(()=>{D.rules=box.querySelector('[name=rules]').value.split('\n').map(x=>x.trim()).filter(Boolean)},'Правила');break;
     case 'addhol':{
       const f=v('hfrom'),t=v('hto');
       if(!f||!t)return toast('Укажите обе даты',1);
       if(t<f)return toast('Дата «по» раньше даты «с»',1);
       act(()=>{D.holidays=normHolidays([...(D.holidays||[]),{from:f,to:t}])},'Каникулы');break}
-    case 'delhol':act(()=>{const hs=normHolidays(D.holidays);hs.splice(i,1);D.holidays=hs},'Удаление каникул');break;
+    case 'delhol':
+      act(()=>{const hs=normHolidays(D.holidays);hs.splice(i,1);D.holidays=hs},'Удаление каникул');break;
     case 'newab':{
       const t=box.querySelector('[name=target]').value;
       if(!t||!D.students[t])return toast('Выберите ученика',1);
@@ -646,7 +653,9 @@ function onAct(e){
       const nv=v('admin');
       if(!nv||D.students[nv])return toast('Введите другой код',1);
       act(()=>{D.admin=nv},'Код преподавателя');break}
-    case 'out':try{localStorage.removeItem('gh_token')}catch(x){}TK='';admin(CFG);break;
+    case 'out':
+      try{localStorage.removeItem('gh_token')}catch(x){}
+      TK='';admin(CFG);break;
   }
 }
 
