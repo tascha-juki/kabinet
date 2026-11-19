@@ -22,7 +22,9 @@
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;transition:background .3s}
-main{max-width:800px;margin:0 auto;padding:18px 16px 56px;position:relative;transition:margin-left .3s}
+
+/* Центрирование */
+main{max-width:800px;margin:0 auto;padding:18px 16px 56px;position:relative;transition:transform .3s, margin-left .3s}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:24px}
 h1{font-size:1.4rem;line-height:1.2;margin:0;font-weight:500}
 h2{font-size:1.05rem;margin:0 0 16px;font-weight:500}
@@ -112,7 +114,7 @@ details li{margin-bottom:6px}
 /* Формы */
 input,select,textarea{font:inherit;padding:10px 12px;border:1.5px solid var(--ln);border-radius:10px;background:var(--bg);color:var(--tx);width:100%;min-width:0;transition:border .2s}
 input:focus,select:focus,textarea:focus{border-color:var(--p);outline:none}
-textarea{min-height:100px;resize:vertical}
+textarea{min-height:160px;resize:vertical}
 button{font:inherit;font-weight:500;padding:10px 16px;border:0;border-radius:10px;background:var(--p);color:#fff;cursor:pointer;transition:opacity .2s}
 button:hover{opacity:.9}
 button.ghost{background:var(--ps);color:var(--p)}
@@ -169,8 +171,8 @@ input[type=checkbox]{width:auto;padding:0;accent-color:var(--p)}
 @media(min-width:850px){
   .sidebar{transform:translateX(-100%);box-shadow:none}
   .sidebar.open{transform:translateX(0);box-shadow:2px 0 12px rgba(0,0,0,0.05)}
+  /* Центрируем контент при открытом меню */
   main{margin-left:0;max-width:900px}
-  .layout-desktop{display:grid;grid-template-columns:1fr;transition:padding-left .3s}
   body.sb-open main{margin-left:var(--sidebar-w)}
   body.sb-open #overlay{opacity:0;pointer-events:none}
 }
@@ -473,8 +475,8 @@ ${(s.history||[]).length?`<ul class="list">${s.history.slice().reverse().map(h=>
 
 function holidaysEditor(){
   const hs=normHolidays(D.holidays);
-  return `<p class="sub">Диапазон дат, который пропускает автоматическая расстановка.</p>
-  ${hs.length?`<div>${hs.map((h,i)=>`<div class="holrow"><span>${fmt(parse(h.from))} — ${fmt(parse(h.to))}</span><button class="red" data-a="delhol" data-i="${i}" style="padding:4px 10px">×</button></div>`).join('')}</div>`:'<p class="empty">Пока нерабочих дней нет.</p>'}
+  return `
+  ${hs.length?`<div>${hs.map((h,i)=>`<div class="holrow"><span>${fmt(parse(h.from))} — ${fmt(parse(h.to))}</span><button class="red" data-a="delhol" data-i="${i}" style="padding:4px 10px">×</button></div>`).join('')}</div>`:'<p class="empty" style="margin-bottom:12px;">Пока нерабочих дней нет.</p>'}
   <div class="rng">
     <label>С<input type="date" name="hfrom" value="${TODAY}"></label>
     <label>По<input type="date" name="hto" value="${TODAY}"></label>
@@ -541,11 +543,9 @@ function view(){
 
     ${Object.entries(S).map(([c,s])=>stu(c,s)).join('')}
 
-    <!-- Возвращенный блок Правил вниз -->
     <section class="card"><details><summary>Правила отмен и переносов</summary>
       <div class="inner">
-        <p class="sub">Одно правило на строку. Общие для всех учеников.</p>
-        <textarea name="rules">${esc((D.rules||[]).join('\n'))}</textarea>
+        <textarea name="rules" placeholder="Одно правило на строку...">${esc((D.rules||[]).join('\n'))}</textarea>
         <div class="row"><button data-a="rules">Сохранить правила</button></div>
       </div>
     </details></section>
@@ -559,9 +559,24 @@ function onAct(e){
   const el=e.target.closest('[data-a]');if(!el)return;
   const pick=el.tagName==='SELECT'||el.type==='file';
   if((e.type==='click')===pick)return;
-  const a=el.dataset.a,box=el.closest('.inner')||el.closest('section'),c=box.dataset.c,s=c?D.students[c]:null,i=+el.dataset.i;
-  const v=n=>box.querySelector('[name='+n+']').value.trim();
+  
+  const a=el.dataset.a;
+  // Ищем ближайший контейнер для форм: если мы в сайдбаре, ищем там, иначе в секции или details
+  let box=el.closest('#sidebar');
+  if(!box) box=el.closest('.inner')||el.closest('section');
+  
+  const c=box.dataset?.c;
+  const s=c?D.students[c]:null;
+  const i=+el.dataset.i;
+  
+  // Универсальный поиск значений: если в box (сайдбаре), ищем по всему сайдбару
+  const v=n=>{
+    const target = box.querySelector(`[name="${n}"]`);
+    return target ? target.value.trim() : '';
+  };
+  
   OPEN=c||null;
+  
   switch(a){
     case 'add':{
       if(!v('name'))return toast('Введите имя',1);
